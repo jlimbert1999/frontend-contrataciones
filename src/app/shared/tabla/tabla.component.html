@@ -1,0 +1,39 @@
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+        <ng-container [matColumnDef]="'nro'">
+            <th mat-header-cell *matHeaderCellDef>Nro.</th>
+            <td mat-cell *matCellDef="let element; let i=index">
+                {{i+1}}
+            </td>
+        </ng-container>
+        <ng-container *ngFor="let columna of displayedColumns" [matColumnDef]="columna.key">
+            <th mat-header-cell *matHeaderCellDef>{{columna.titulo}}</th>
+            <td mat-cell *matCellDef="let element" [ngSwitch]="columna.key">
+                <ng-container *ngSwitchCase="'activo'">
+                    <p style="color: darkgreen;" *ngIf="element[columna.key]==1">Habilitado</p>
+                    <p style="color: red;" *ngIf="element[columna.key]==0">Deshabilitado</p>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>{{element[columna.key]}}</ng-container>
+            </td>
+        </ng-container>
+
+        <ng-container [matColumnDef]="'opciones'">
+            <th mat-header-cell *matHeaderCellDef>Opciones</th>
+            <td mat-cell *matCellDef="let element">
+                <button (click)="editarDatos(element)" mat-icon-button>
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button>
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columsTable"></tr>
+        <tr mat-row *matRowDef="let row; columns: columsTable;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="number_rows" (page)="getPageDetails($event)"
+        showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+</div>

@@ -1,0 +1,9 @@
+table {
+    width: 100%;
+}
+
+.mat-column-opciones {
+    width: 150px;
+    border-left: 1px solid currentColor;
+    text-align: center;
+}
