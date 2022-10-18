@@ -13,6 +13,9 @@
                     <p style="color: darkgreen;" *ngIf="element[columna.key]==1">Habilitado</p>
                     <p style="color: red;" *ngIf="element[columna.key]==0">Deshabilitado</p>
                 </ng-container>
+                <ng-container *ngSwitchCase="'institucion'">
+                   {{element[columna.key].sigla}}
+                </ng-container>
 
                 <ng-container *ngSwitchDefault>{{element[columna.key]}}</ng-container>
             </td>
@@ -24,8 +27,11 @@
                 <button (click)="editarDatos(element)" mat-icon-button>
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button>
+                <button *ngIf="element.activo" (click)="eliminarDatos(element)" mat-icon-button>
                     <mat-icon>delete</mat-icon>
+                </button>
+                <button *ngIf="!element.activo" (click)="habilitarDatos(element)" mat-icon-button>
+                    <mat-icon>restart_alt</mat-icon>
                 </button>
             </td>
         </ng-container>

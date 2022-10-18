@@ -14,10 +14,15 @@ export class TablaComponent implements OnInit {
   @Input() total_filas: number
 
   @Output() llamarEditar: EventEmitter<object>;
+  @Output() llamarEliminar: EventEmitter<object>;
+  @Output() llamarHabilitar: EventEmitter<object>;
+
   @Output() eventoPaginacion: EventEmitter<any>;
 
   constructor() {
     this.llamarEditar = new EventEmitter();
+    this.llamarEliminar=new EventEmitter()
+    this.llamarHabilitar=new EventEmitter()
     this.eventoPaginacion = new EventEmitter()
   }
 
@@ -27,7 +32,6 @@ export class TablaComponent implements OnInit {
 
   }
   ngOnChanges(): void {
-    console.log('tick');
     this.columsTable = this.displayedColumns.map((titulo: any) => titulo.key);
     this.columsTable.unshift('nro')
     this.columsTable.push('opciones')
@@ -38,6 +42,12 @@ export class TablaComponent implements OnInit {
   }
   editarDatos(datos: object) {
     this.llamarEditar.emit(datos);
+  }
+  eliminarDatos(datos:object){
+    this.llamarEliminar.emit(datos)
+  }
+  habilitarDatos(datos:object){
+    this.llamarHabilitar.emit(datos)
   }
 
 }

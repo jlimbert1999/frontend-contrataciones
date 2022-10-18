@@ -7,6 +7,7 @@ import { InstitucionDialogComponent } from './instituciones/institucion-dialog/i
 import { MaterialModule } from '../angular-material/material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
+import { DependenciaDialogComponent } from './dependencias/dependencia-dialog/dependencia-dialog.component';
 
 
 
@@ -14,7 +15,8 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [
     DependenciasComponent,
     InstitucionesComponent,
-    InstitucionDialogComponent
+    InstitucionDialogComponent,
+    DependenciaDialogComponent
   ],
   imports: [
     CommonModule,
