@@ -22,8 +22,8 @@ export class DependenciasService {
     )
   }
   obtener_instituciones_habilitadas() {
-    return this.http.get<{ ok: boolean, instituciones:{id_institucion:string, nombre:string}[] }>(`${base_url}/dependencias/instituciones`).pipe(
-      map(resp => resp.instituciones)
+    return this.http.get<{ ok: boolean, instituciones:{id_institucion:string, nombre:string}[] }>(`${base_url}/dependencias/instituciones/registro`).pipe(
+      map(resp =>{console.log(resp); return resp.instituciones})
     )
   }
   obtener_dependencias() {

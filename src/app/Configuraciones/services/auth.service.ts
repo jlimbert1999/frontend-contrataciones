@@ -13,6 +13,16 @@ export class AuthService {
         { nombre: 'Administrar dependencias', ruta: 'dependencias', icon: 'group' },
 
       ]
+      
+    },
+    
+    {
+      modulo: "Usuarios",
+      submodulos: [
+        { nombre: 'Administrar funcionarios', ruta: 'funcionarios', icon: 'group' },
+        { nombre: 'Administrar cuentas', ruta: 'cuentas', icon: 'group' },
+      ]
+      
     }
   ]
 

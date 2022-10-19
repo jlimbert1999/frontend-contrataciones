@@ -8,6 +8,10 @@ import { MaterialModule } from '../angular-material/material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { DependenciaDialogComponent } from './dependencias/dependencia-dialog/dependencia-dialog.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { UsuarioDialogComponent } from './usuarios/usuario-dialog/usuario-dialog.component';
+import { CuentasComponent } from './cuentas/cuentas.component';
+import { CuentaDialogComponent } from './cuentas/cuenta-dialog/cuenta-dialog.component';
 
 
 
@@ -16,7 +20,11 @@ import { DependenciaDialogComponent } from './dependencias/dependencia-dialog/de
     DependenciasComponent,
     InstitucionesComponent,
     InstitucionDialogComponent,
-    DependenciaDialogComponent
+    DependenciaDialogComponent,
+    UsuariosComponent,
+    UsuarioDialogComponent,
+    CuentasComponent,
+    CuentaDialogComponent
   ],
   imports: [
     CommonModule,
