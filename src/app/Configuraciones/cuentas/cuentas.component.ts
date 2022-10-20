@@ -34,14 +34,22 @@ export class CuentasComponent implements OnInit {
   }
   obtener_cuentas(){
     this.cuentaService.obtener_cuentas().subscribe(cuentas=>{
-      console.log(cuentas);
       this.Cuentas=cuentas
       this.dataSource.data=this.Cuentas
     })
 
   }
   editar_cuenta(data:any){
-    
+    const dialogRef = this.dialog.open(CuentaDialogComponent, {
+      width: '1000px',
+      data
+    });
+    dialogRef.afterClosed().subscribe((result: CuentaDialogComponent) => {
+      if (result) {
+       this.obtener_cuentas()
+
+      }
+    });
   }
 
 }

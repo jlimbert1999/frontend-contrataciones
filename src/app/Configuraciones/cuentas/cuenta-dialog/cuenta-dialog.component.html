@@ -1,101 +1,258 @@
-<h2 mat-dialog-title>{{titulo}} Funcionarios</h2>
-<mat-dialog-content class="mat-typography">
-    <mat-stepper orientation="vertical" [linear]="false" #stepper>
-        <mat-step [stepControl]="Form_Funcionario">
-            <form [formGroup]="Form_Funcionario">
-                <ng-template matStepLabel>Datos funcionario</ng-template>
-                <div class="row">
-                    <div class="col-8">
+<h2 mat-dialog-title>{{titulo}} Cuenta</h2>
+<mat-dialog-content>
+    <ng-container *ngIf="!data">
+        <mat-stepper orientation="vertical" [linear]="false" #stepper>
+            <mat-step [stepControl]="Form_Funcionario">
+                <form [formGroup]="Form_Funcionario">
+                    <ng-template matStepLabel>Datos funcionario</ng-template>
+                    <div class="row">
+                        <div class="col-8">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Nombre</mat-label>
+                                <input formControlName="nombre" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Dni</mat-label>
+                                <input formControlName="dni" matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Cargo</mat-label>
+                                <input formControlName="cargo" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Telefono</mat-label>
+                                <input formControlName="telefono" matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
                         <mat-form-field appearance="fill">
-                            <mat-label>Nombre</mat-label>
-                            <input formControlName="nombre" matInput>
+                            <mat-label>Direccion</mat-label>
+                            <input formControlName="direccion" matInput>
                         </mat-form-field>
                     </div>
-                    <div class="col-4">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Dni</mat-label>
-                            <input formControlName="dni" matInput>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-8">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Cargo</mat-label>
-                            <input formControlName="cargo" matInput>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-4">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Telefono</mat-label>
-                            <input formControlName="telefono" matInput>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Direccion</mat-label>
-                        <input formControlName="direccion" matInput>
-                    </mat-form-field>
-                </div>
 
-                <div>
-                    <button mat-button matStepperNext>Next</button>
-                </div>
-            </form>
-
-        </mat-step>
-        <mat-step [stepControl]="Form_Cuenta">
-            <form [formGroup]="Form_Cuenta">
-                <ng-template matStepLabel>Datos cuenta</ng-template>
-                <div class="row">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Seleccione la dependencia</mat-label>
-                        <mat-select formControlName="dependencia">
-                          <mat-option *ngFor="let dep of dependencias" [value]="dep.id_dependencia">
-                            {{dep.nombre}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                   
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Login</mat-label>
-                            <input formControlName="login" matInput>
-                        </mat-form-field>
+                    <div>
+                        <button mat-button matStepperNext>Siguiente</button>
                     </div>
-                    <div class="col-6">
+                </form>
+
+            </mat-step>
+            <mat-step [stepControl]="Form_Cuenta">
+                <form [formGroup]="Form_Cuenta">
+                    <ng-template matStepLabel>Datos cuenta</ng-template>
+                    <div class="row">
                         <mat-form-field appearance="fill">
-                            <mat-label>Password</mat-label>
-                            <input formControlName="password" matInput>
+                            <mat-label>Seleccione la dependencia</mat-label>
+                            <mat-select formControlName="dependencia">
+                                <mat-option *ngFor="let dep of dependencias" [value]="dep.id_dependencia">
+                                    {{dep.nombre}}
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
+
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Login</mat-label>
+                                <input formControlName="login" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Password</mat-label>
+                                <input formControlName="password" matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Rol</mat-label>
+                                <input formControlName="rol" matInput>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <button mat-button matStepperPrevious>Atras</button>
+                        <button mat-button (click)="stepper.reset()">Restablecer</button>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-stepper>
+    </ng-container>
+    <ng-container *ngIf="data">
+        <mat-toolbar>
+            <span>
+                {{data.funcionario.nombre|titlecase}}
+            </span>
+            <span class="example-spacer"></span>
+            <mat-button-toggle-group [(ngModel)]="asignar" name="fontStyle" aria-label="Font Style">
+                <mat-button-toggle [value]="false">Cuenta</mat-button-toggle>
+                <mat-button-toggle (click)="obtener_funcionarios()" [value]="true">Asignar</mat-button-toggle>
+
+            </mat-button-toggle-group>
+
+        </mat-toolbar>
+        <ng-container *ngIf="!asignar">
+
+            <ng-template matStepLabel>Datos cuenta</ng-template>
+
+            <div class="container-xl px-4 mt-4">
+
+                <hr class="mt-0 mb-4">
                 <div class="row">
-                    <div class="col-6">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Rol</mat-label>
-                            <input formControlName="rol" matInput>
-                        </mat-form-field>
+                    <div class="col-xl-4">
+                        <!-- Profile picture card-->
+                        <div class="card mb-4 mb-xl-0">
+
+                            <div class="card-body text-center">
+                                <!-- Profile picture image-->
+                                <img class="img-account-profile rounded-circle mb-2"
+                                    src="../../../../assets/img/account.png" alt="">
+                                <!-- Profile picture help block-->
+                                <div class="small font-italic text-muted mb-3">
+
+                                    <p>{{data.funcionario.cargo|uppercase}}</p>
+                                   
+                                </div>
+
+
+
+                            </div>
+                        </div>
                     </div>
-                    
+                    <div class="col-xl-8">
+                        <!-- Account details card-->
+                        <div class="card mb-4">
+                            <div class="card-header">Detalles cuenta</div>
+                            <div class="card-body">
+                                <form [formGroup]="Form_Cuenta">
+
+                                    <!-- Form Row-->
+                                    <div class="row gx-3 mb-3">
+
+                                        <div class="col-md-6">
+                                            <mat-form-field appearance="legacy">
+                                                <mat-label>Login</mat-label>
+                                                <input formControlName="login" matInput>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <mat-form-field appearance="legacy">
+                                                <mat-label>Rol</mat-label>
+                                                <input formControlName="rol" matInput>
+                                            </mat-form-field>
+
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="cambiar_password" class="mb-3">
+                                        <mat-form-field *ngIf="cambiar_password" appearance="fill">
+                                            <mat-label>Password</mat-label>
+                                            <input formControlName="password" matInput>
+                                        </mat-form-field>
+                                    </div>
+                                    <mat-checkbox [checked]="cambiar_password" (change)='cambiar_formulario($event.checked)' class="example-margin">
+                                        Actualizar password
+                                    </mat-checkbox>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <button mat-button matStepperPrevious>Back</button>
-                    <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="asignar">
+            <mat-form-field appearance="standard">
+                <mat-label>Filter</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+            </mat-form-field>
+            <div class="mat-elevation-z8">
+                <div class="example-table-container">
+                    <table mat-table [dataSource]="dataSource" matSort>
+
+                        <ng-container matColumnDef="nombre">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                            <td mat-cell *matCellDef="let row"> {{row.nombre}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cargo">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Cargo </th>
+                            <td mat-cell *matCellDef="let row"> {{row.cargo}}% </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dni">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Dni </th>
+                            <td mat-cell *matCellDef="let row"> {{row.dni}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="opciones">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
+                            <td mat-cell *matCellDef="let row">
+                                <button (click)="asignar_cuenta(row)" mat-raised-button color="primary">Asignar</button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                        </tr>
+                    </table>
+
 
                 </div>
-            </form>
-        </mat-step>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 
-    </mat-stepper>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+        </ng-container>
+
+
+    </ng-container>
+
 
 
 
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancelar</button>
-    <button mat-button [disabled]="Form_Funcionario.invalid" (click)="guardar()" cdkFocusInitial>Guardar</button>
+    <ng-container *ngIf="data">
+        <button mat-button [disabled]="Form_Cuenta.invalid" (click)="guardar()">Guardar</button>
+    </ng-container>
+    <ng-container *ngIf="!data">
+        <button mat-button [disabled]="Form_Funcionario.invalid || Form_Cuenta.invalid"
+            (click)="guardar()">Guardar</button>
+    </ng-container>
+
+
+
+
+
 </mat-dialog-actions>

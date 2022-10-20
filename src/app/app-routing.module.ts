@@ -4,6 +4,7 @@ import { HomeRoutingModule } from './home/home-routing.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
+  
   { path: '**', redirectTo: '/home' }
 ];
 

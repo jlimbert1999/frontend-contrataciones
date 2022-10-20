@@ -2,7 +2,7 @@ export interface UsuarioModel {
     id_funcionario?: string
     nombre: string
     dni:string
-    telefonio:number
+    telefono:number
     direccion:string
     cargo: string
     estado?:boolean

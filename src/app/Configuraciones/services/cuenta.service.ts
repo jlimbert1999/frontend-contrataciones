@@ -18,6 +18,13 @@ export class CuentaService {
       })
     )
   }
+  obtener_funcionarios_asignacion(){
+    return this.http.get<{ ok: boolean, funcionarios: {id_funcionario:string, nombre:string, cargo:string, dni:string}[]}>(`${base_url}/cuentas/usuarios`).pipe(
+      map(resp => {
+        return resp.funcionarios
+      })
+    )
+  }
   agregar_cuenta(cuenta: CuentaModel, funcionario:UsuarioModel) {
     return this.http.post<{ ok: boolean, cuenta: CuentaModel }>(`${base_url}/cuentas`, {cuenta, funcionario}).pipe(
       map(resp => {
@@ -26,11 +33,24 @@ export class CuentaService {
       })
     )
   }
+  editar_cuenta(id_cuenta:string,cuenta:CuentaModel){
+    return this.http.put<{ ok: boolean, cuenta: CuentaModel }>(`${base_url}/cuentas/${id_cuenta}`, cuenta).pipe(
+      map(resp =>  resp.cuenta)
+    )
+  }
+
   obtener_cuentas(){
     return this.http.get<{ ok: boolean, cuentas: Cuenta[]}>(`${base_url}/cuentas`).pipe(
       map(resp => {
         return resp.cuentas
       })
+    )
+  }
+
+
+  asignar_cuenta(id_cuenta:string, id_funcionarioActual:string, id_funcionarioNuevo:string){
+    return this.http.put<{ ok: boolean, cuenta: CuentaModel }>(`${base_url}/cuentas/asignar/${id_cuenta}`, {id_funcionarioActual, id_funcionarioNuevo}).pipe(
+      map(resp =>  resp.cuenta)
     )
   }
 

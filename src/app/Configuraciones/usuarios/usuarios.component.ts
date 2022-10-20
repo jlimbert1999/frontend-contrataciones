@@ -34,7 +34,6 @@ export class UsuariosComponent implements OnInit {
       this.Usuarios = data.funcionarios
       this.Total = data.total
       this.dataSource.data = this.Usuarios
-      console.log(this.Usuarios);
     })
   }
 

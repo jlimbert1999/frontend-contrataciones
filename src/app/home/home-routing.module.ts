@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from '../auth/login/login.component';
 import { CuentasComponent } from '../Configuraciones/cuentas/cuentas.component';
 import { DependenciasComponent } from '../Configuraciones/dependencias/dependencias.component';
 import { InstitucionesComponent } from '../Configuraciones/instituciones/instituciones.component';
@@ -15,7 +16,12 @@ const routes: Routes = [
             { path: 'funcionarios', component: UsuariosComponent },
             { path: 'cuentas', component: CuentasComponent },
         ]
-    }
+    },
+    {
+        path: 'login', component: LoginComponent,
+     
+    },
+
 ];
 
 @NgModule({

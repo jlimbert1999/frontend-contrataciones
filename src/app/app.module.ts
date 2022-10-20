@@ -9,6 +9,7 @@ import { ConfiguracionesModule } from './Configuraciones/configuraciones.module'
 import { MaterialModule } from './angular-material/material.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './interceptors/interceptor.service';
+import { AuthModule } from './auth/auth.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +20,7 @@ import { InterceptorService } from './interceptors/interceptor.service';
     AppRoutingModule,
     BrowserAnimationsModule,
     ConfiguracionesModule,
+    AuthModule,
     MaterialModule
   ],
   providers: [
