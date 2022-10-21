@@ -12,6 +12,8 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuarioDialogComponent } from './usuarios/usuario-dialog/usuario-dialog.component';
 import { CuentasComponent } from './cuentas/cuentas.component';
 import { CuentaDialogComponent } from './cuentas/cuenta-dialog/cuenta-dialog.component';
+import { TiposTramitesComponent } from './tipos-tramites/tipos-tramites.component'; 
+import { DialogTiposComponent } from './tipos-tramites/dialog-tipos/dialog-tipos.component';
 
 
 
@@ -24,7 +26,9 @@ import { CuentaDialogComponent } from './cuentas/cuenta-dialog/cuenta-dialog.com
     UsuariosComponent,
     UsuarioDialogComponent,
     CuentasComponent,
-    CuentaDialogComponent
+    CuentaDialogComponent,
+    TiposTramitesComponent,
+    DialogTiposComponent
   ],
   imports: [
     CommonModule,

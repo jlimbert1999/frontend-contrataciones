@@ -25,6 +25,7 @@ export class CuentaService {
       })
     )
   }
+  
   agregar_cuenta(cuenta: CuentaModel, funcionario:UsuarioModel) {
     return this.http.post<{ ok: boolean, cuenta: CuentaModel }>(`${base_url}/cuentas`, {cuenta, funcionario}).pipe(
       map(resp => {

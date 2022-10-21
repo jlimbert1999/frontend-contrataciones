@@ -80,6 +80,15 @@
                                 <mat-label>Rol</mat-label>
                                 <input formControlName="rol" matInput>
                             </mat-form-field>
+
+                            <mat-form-field appearance="fill">
+                                <mat-label>Permisos</mat-label>
+                                <mat-select formControlName="rol">
+                                    <mat-option *ngFor="let rol of Roles" [value]="rol.value">
+                                        {{rol.viewValue | uppercase}}
+                                    </mat-option>
+                                </mat-select>                              
+                            </mat-form-field>
                         </div>
 
                     </div>

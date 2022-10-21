@@ -47,6 +47,13 @@ export class CuentaDialogComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  Roles=[
+    {value:'planificacion', viewValue:'Planificacion'},
+    {value:'sec_planificacion', viewValue:'Secretaria de planificacion'},
+    {value:'sicoes', viewValue:'SICOES'},
+    {value:'ampe', viewValue:'AMPE'},
+  ]
+
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,

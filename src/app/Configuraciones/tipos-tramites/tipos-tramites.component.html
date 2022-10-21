@@ -1,0 +1,23 @@
+<p>
+    <mat-toolbar>
+        <ng-container>
+            <span>Tipos tramites</span>
+            <span class="example-spacer"></span>
+            <button mat-icon-button (click)="agregar_tipoTramite()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </ng-container>
+        <ng-container *ngIf="false">
+            <mat-form-field floatLabel="never" style="width: 100%;">
+                <mat-label>Ingrese el nombre o sigla de la institucion</mat-label>
+                <input #txtSearch matInput type="text">
+                <button matSuffix mat-icon-button>
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </ng-container>
+    </mat-toolbar>
+</p>
+
+<app-tabla [displayedColumns]="displayedColumns" [dataSource]="dataSource"
+    [total_filas]="Total" (llamarEditar)="editar_tipoTramite($event)"></app-tabla>

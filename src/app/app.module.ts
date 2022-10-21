@@ -10,6 +10,7 @@ import { MaterialModule } from './angular-material/material.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './interceptors/interceptor.service';
 import { AuthModule } from './auth/auth.module';
+import { TramitesModule } from './Tramites/tramites.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
     BrowserAnimationsModule,
     ConfiguracionesModule,
     AuthModule,
+    TramitesModule,
     MaterialModule
   ],
   providers: [
