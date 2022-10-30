@@ -27,14 +27,14 @@ export class DependenciasComponent implements OnInit {
     this.obtener_dependencias()
   }
 
-  
+
   agregar_dependencia() {
     const dialogRef = this.dialog.open(DependenciaDialogComponent, {
       width: '700px'
     });
     dialogRef.afterClosed().subscribe((result: DependenciaInterface) => {
       if (result) {
-       this.obtener_dependencias()
+        this.obtener_dependencias()
 
       }
     });
@@ -46,30 +46,29 @@ export class DependenciasComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: DependenciaInterface) => {
       if (result) {
-       this.obtener_dependencias()
+        this.obtener_dependencias()
 
       }
     });
   }
   obtener_dependencias() {
-    this.dependenciasService.obtener_dependencias().subscribe(data => {
-      this.Dependencias = data.dependencias
-      this.Total = data.total
+    this.dependenciasService.obtener_dependencias().subscribe(deps => {
+      this.Dependencias = deps
       this.dataSource.data = this.Dependencias
     })
   }
-  eliminar_dependencia(data:any){
-    this.dependenciasService.cambiar_situacion_dependencia(data.id_dependencia, false).subscribe(message=>{
-      const indexFound=this.Dependencias.findIndex(dep=>dep.id_dependencia==data.id_dependencia)
-      this.Dependencias[indexFound].activo=false
-      this.dataSource.data=this.Dependencias
+  eliminar_dependencia(data: any) {
+    this.dependenciasService.cambiar_situacion_dependencia(data.id_dependencia, false).subscribe(message => {
+      const indexFound = this.Dependencias.findIndex(dep => dep.id_dependencia == data.id_dependencia)
+      this.Dependencias[indexFound].activo = false
+      this.dataSource.data = this.Dependencias
     })
   }
-  habilitar_dependencia(data:any){
-    this.dependenciasService.cambiar_situacion_dependencia(data.id_dependencia, true).subscribe(message=>{
-      const indexFound=this.Dependencias.findIndex(dep=>dep.id_dependencia==data.id_dependencia)
-      this.Dependencias[indexFound].activo=true
-      this.dataSource.data=this.Dependencias
+  habilitar_dependencia(data: any) {
+    this.dependenciasService.cambiar_situacion_dependencia(data.id_dependencia, true).subscribe(message => {
+      const indexFound = this.Dependencias.findIndex(dep => dep.id_dependencia == data.id_dependencia)
+      this.Dependencias[indexFound].activo = true
+      this.dataSource.data = this.Dependencias
     })
   }
   buscar_dependencia(event: Event) {
@@ -80,16 +79,7 @@ export class DependenciasComponent implements OnInit {
     })
   }
   cambiar_paginacion(evento: any) {
-    this.dependenciasService.items_page = evento.pageSize
-    this.dependenciasService.pageIndex = evento.pageIndex
-    if (evento.pageIndex > evento.previousPageIndex) {
-      this.dependenciasService.next_page()
-    }
-    else if (evento.pageIndex < evento.previousPageIndex) {
-      this.dependenciasService.previus_page()
-    }
-
-    // this.obtener_dependencias()
+    this.obtener_dependencias()
   }
 
   activar_busqueda() {

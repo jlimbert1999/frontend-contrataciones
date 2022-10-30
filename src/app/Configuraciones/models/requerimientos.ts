@@ -1,5 +1,5 @@
 export interface RequerimientoModel {
-    id_requerimiento?: string;
+    _id?: string;
     nombre: string;
     activo: boolean;
   }

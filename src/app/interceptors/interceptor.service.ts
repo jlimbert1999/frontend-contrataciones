@@ -22,8 +22,14 @@ export class InterceptorService {
   }
   manejoErrores(error: HttpErrorResponse) {
     console.log(error);
-    Swal.fire('error', error.error.message, 'error')
+    if (error.status === 401) {
+      console.log('No autorizado, vuelva a iniciar sesion');
+    }
+    else {
+      Swal.fire('error', error.error.message, 'error')
+    }
     return throwError(() => error);
+
   }
 }
 

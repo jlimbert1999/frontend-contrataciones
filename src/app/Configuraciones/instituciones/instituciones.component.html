@@ -1,11 +1,7 @@
 <p>
     <mat-toolbar>
         <ng-container *ngIf="institucionesService.modo_busqueda==false">
-            <span>Instituciones/
-                <small style="font-size: 14px;">
-                    Total: {{Total}}
-                </small>
-            </span>
+            <span>Instituciones </span>
             <span class="example-spacer"></span>
             <button mat-icon-button (click)="activar_busqueda()">
                 <mat-icon>search</mat-icon>
@@ -27,4 +23,5 @@
 </p>
 
 <app-tabla [displayedColumns]="displayedColumns" [dataSource]="dataSource"
-    (eventoPaginacion)="cambiar_paginacion($event)" [total_filas]="Total" (llamarEditar)="editar_institucion($event)"></app-tabla>
+    (eventoPaginacion)="cambiar_paginacion($event)" [total_filas]="Total" (llamarEditar)="editar_institucion($event)"
+    (llamarHabilitar)="habilitar_institucion($event)" (llamarEliminar)="eliminar_institucion($event)"></app-tabla>
