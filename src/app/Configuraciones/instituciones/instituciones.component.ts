@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { InstitucionModel } from '../models/institucion.model';
 import { InstitucionesService } from '../services/instituciones.service';
+import { PaginationService } from '../services/pagination.service';
 import { InstitucionDialogComponent } from './institucion-dialog/institucion-dialog.component';
 
 @Component({
@@ -13,8 +13,7 @@ import { InstitucionDialogComponent } from './institucion-dialog/institucion-dia
 })
 export class InstitucionesComponent implements OnInit {
   Instituciones: InstitucionModel[] = []
-  Total: number = 0
-  dataSource = new MatTableDataSource()
+
   displayedColumns = [
     { key: 'sigla', titulo: 'Sigla' },
     { key: 'nombre', titulo: 'Nombre' },
@@ -24,10 +23,12 @@ export class InstitucionesComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    public institucionesService: InstitucionesService
+    public institucionesService: InstitucionesService,
+    public paginationService: PaginationService
   ) { }
 
   ngOnInit(): void {
+    this.paginationService.pageIndex = 0
     this.obtener_instituciones()
 
   }
@@ -38,11 +39,7 @@ export class InstitucionesComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: InstitucionModel) => {
       if (result) {
-        if (this.Instituciones.length > 10) {
-          this.Instituciones.pop()
-        }
-        this.Instituciones.unshift(result)
-        this.dataSource.data = this.Instituciones
+        this.Instituciones = [result, ...this.Instituciones]
       }
     });
   }
@@ -53,55 +50,53 @@ export class InstitucionesComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: InstitucionModel) => {
       if (result) {
-        const foundIndex = this.Instituciones.findIndex(int => int.id_institucion == data.id_institucion);
-        this.Instituciones[foundIndex] = result;
-        this.dataSource.data = this.Instituciones
-
+        let newData = [...this.Instituciones]
+        const foundIndex = newData.findIndex(int => int.id_institucion === data.id_institucion);
+        newData[foundIndex] = result;
+        this.Instituciones = newData
       }
     });
   }
-  habilitar_institucion(data: any) {
-    this.institucionesService.habilitar(data.id_institucion!).subscribe(inst => {
-      const indexFound = this.Instituciones.findIndex(inst => inst.id_institucion == data.id_institucion)
-      this.Instituciones[indexFound].activo = true
+  cambiar_situacion(data: any) {
+    this.institucionesService.cambiar_situacion_institucion(data.id_institucion!, data.activo).subscribe(inst => {
+      let newData = [...this.Instituciones]
+      const foundIndex = newData.findIndex(int => int.id_institucion === data.id_institucion);
+      newData[foundIndex].activo = inst.activo;
+      this.Instituciones = newData
     })
   }
 
-  eliminar_institucion(data: any) {
-    this.institucionesService.eliminar(data.id_institucion!).subscribe(inst => {
-      const indexFound = this.Instituciones.findIndex(inst => inst.id_institucion == data.id_institucion)
-      this.Instituciones[indexFound].activo = false
-    })
-  }
   obtener_instituciones() {
     this.institucionesService.obtener_instituciones().subscribe(inst => {
       this.Instituciones = inst
-      this.dataSource.data = this.Instituciones
     })
   }
-  buscar_institucion(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    if (filterValue === '') {
-      return
+  buscar_institucion() {
+    if (this.institucionesService.termino_busqueda !== '') {
+      this.institucionesService.buscar_instituciones(this.institucionesService.termino_busqueda.trim().toLowerCase()).subscribe(data => {
+        this.Instituciones = data
+      })
     }
-    this.institucionesService.buscar_instituciones(filterValue.trim().toLowerCase()).subscribe(data => {
-      this.Instituciones = data
-      this.dataSource.data = this.Instituciones
-    })
+
   }
   cambiar_paginacion(evento: PageEvent) {
-    this.obtener_instituciones()
+    if (this.institucionesService.termino_busqueda !== "") {
+      this.buscar_institucion()
+    }
+    else {
+      this.obtener_instituciones()
+    }
+
   }
 
   activar_busqueda() {
-    this.institucionesService.modo_busqueda = true
+    this.institucionesService.modo_busqueda(true)
     setTimeout(() => {
       this.searchInput.nativeElement.focus()
     })
   }
   desactivar_busqueda() {
-    this.institucionesService.termino_busqueda = ""
-    this.institucionesService.modo_busqueda = false
+    this.institucionesService.modo_busqueda(false)
     this.obtener_instituciones()
   }
 

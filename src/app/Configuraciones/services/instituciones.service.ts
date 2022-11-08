@@ -12,8 +12,7 @@ const base_url = environment.base_url
 export class InstitucionesService {
 
   termino_busqueda: string = ""
-  modo_busqueda: boolean = false
-  pageIndex: number
+  busqueda: boolean = false
 
   constructor(private http: HttpClient, private paginationService: PaginationService) { }
 
@@ -29,6 +28,7 @@ export class InstitucionesService {
     return this.http.get<{ ok: boolean, instituciones: InstitucionModel[], total: number }>(`${base_url}/instituciones?pageIndex=${this.paginationService.pageIndex}&rows=${this.paginationService.rows}`).pipe(
       map(resp => {
         this.paginationService.dataSize = resp.total
+        this.paginationService.pageIndex = 0
         return resp.instituciones
       })
     )
@@ -38,16 +38,19 @@ export class InstitucionesService {
       map(resp => resp.institucion)
     )
   }
-  habilitar(id_institucion: string) {
-    return this.http.put<{ ok: boolean, institucion: InstitucionModel }>(`${base_url}/instituciones/${id_institucion}`, { activo: true }).pipe(
+  cambiar_situacion_institucion(id_institucion: string, activo: boolean) {
+    let newSituacion: boolean
+    if (activo === false) {
+      newSituacion = true
+    }
+    else {
+      newSituacion = false
+    }
+    return this.http.put<{ ok: boolean, institucion: InstitucionModel }>(`${base_url}/instituciones/${id_institucion}`, { activo: newSituacion }).pipe(
       map(resp => resp.institucion)
     )
   }
-  eliminar(id_institucion: string) {
-    return this.http.put<{ ok: boolean, institucion: InstitucionModel }>(`${base_url}/instituciones/${id_institucion}`, { activo: false }).pipe(
-      map(resp => resp.institucion)
-    )
-  }
+
   buscar_instituciones(termino: string) {
     return this.http.get<{ ok: boolean, instituciones: InstitucionModel[], total: number }>(`${base_url}/instituciones/${termino}`).pipe(
       map(resp => {
@@ -55,6 +58,11 @@ export class InstitucionesService {
         return resp.instituciones
       })
     )
+  }
+  modo_busqueda(activar: boolean) {
+    this.busqueda = activar
+    this.paginationService.pageIndex = 0
+    this.termino_busqueda = ""
   }
 
 }

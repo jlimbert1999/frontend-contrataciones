@@ -5,12 +5,13 @@
             <mat-form-field appearance="fill">
                 <mat-label>Seleccione la institucion</mat-label>
                 <mat-select formControlName="institucion">
-                  <mat-option *ngFor="let inst of Instituciones" [value]="inst.id_institucion">
-                    {{inst.nombre}}
-                  </mat-option>
+                    <mat-option (onSelectionChange)="institucion=inst" *ngFor="let inst of Instituciones"
+                        [value]="inst.id_institucion">
+                        {{inst.nombre}}
+                    </mat-option>
                 </mat-select>
-              </mat-form-field>
-              
+            </mat-form-field>
+
         </div>
         <div class="row">
             <div class="col-8">
@@ -32,6 +33,6 @@
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancelar</button>
-    <button mat-button [disabled]="Form_Dependencia.invalid" (click)="guardar()">Guardar</button>
+    <button class="close-button" mat-button mat-dialog-close>Cancelar</button>
+    <button class="save-button" mat-button [disabled]="Form_Dependencia.invalid" (click)="guardar()">Guardar</button>
 </mat-dialog-actions>

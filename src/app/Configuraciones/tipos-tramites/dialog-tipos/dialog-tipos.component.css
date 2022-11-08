@@ -1,10 +1,10 @@
-
 .mat-form-field {
   font-size: 14px;
   width: 100%;
 }
+
 .example-spacer {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .mat-column-opciones {
@@ -21,7 +21,7 @@
 .example-table-container {
   position: relative;
   min-height: 200px;
-  max-height: 300px;
+  max-height: 250px;
   overflow: auto;
 }
 
@@ -57,3 +57,11 @@ table {
   max-width: 124px;
 }
 
+
+.is_active {
+  color: green;
+}
+
+.is_inactive {
+  color: red;
+}

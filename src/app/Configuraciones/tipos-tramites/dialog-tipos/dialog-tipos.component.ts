@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -9,21 +9,22 @@ import { TiposTramitesService } from '../../services/tipos-tramites.service';
 import Swal from 'sweetalert2';
 import { RequerimientoModel } from '../../models/requerimientos';
 import { read, writeFileXLSX, utils } from "xlsx";
-import { DataSource } from '@angular/cdk/collections';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-tipos',
   templateUrl: './dialog-tipos.component.html',
   styleUrls: ['./dialog-tipos.component.css'],
 })
-export class DialogTiposComponent implements OnInit {
+export class DialogTiposComponent implements OnInit, AfterViewInit {
   titulo: string;
   Form_TipoTramite: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
+    segmento: ['', Validators.required]
   });
   Requerimientos: RequerimientoModel[] = [];
 
-  displayedColumns = ['nombre', 'opciones'];
+  displayedColumns = ['nombre', 'situacion', 'opciones'];
   dataSource: MatTableDataSource<RequerimientoModel> = new MatTableDataSource()
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -36,25 +37,32 @@ export class DialogTiposComponent implements OnInit {
     private tiposTramitesService: TiposTramitesService
   ) { }
 
+  ngAfterViewInit(): void {
+    if (this.data) {
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
   ngOnInit(): void {
-    console.log(this.data);
     if (this.data) {
       this.titulo = 'Edicion';
       this.Form_TipoTramite.patchValue(this.data);
       this.Requerimientos = this.data.requerimientos
       this.dataSource.data = this.Requerimientos
-      this.dataSource.paginator = this.paginator;
     } else {
       this.titulo = 'Registro';
     }
-  }
-  guardar() {
 
+  }
+
+  guardar() {
     if (this.Form_TipoTramite.valid) {
       if (this.data) {
-        // this.usuariosService.editar_funcionario(this.data.id_funcionario!,this.Form_Funcionario.value).subscribe(inst => {
-        //   this.dialogRef.close(inst)
-        // })
+        let data = this.Form_TipoTramite.value
+        data['requerimientos'] = this.Requerimientos
+        this.tiposTramitesService.editar_tiposTramites(this.data.id_tipoTramite!, data).subscribe(tipoTramite => {
+          this.dialogRef.close(tipoTramite)
+        })
       } else {
         this.tiposTramitesService
           .agregar_tipoTramite(this.Form_TipoTramite.value, this.Requerimientos)
@@ -96,20 +104,34 @@ export class DialogTiposComponent implements OnInit {
       }
     });
   }
-  quitar_requerimiento(requerimiento: RequerimientoModel, pos: number) {
-    if (this.data) {
-      console.log(requerimiento.activo);
-      // this.tiposTramitesService.cambiar_situacion_requerimiento(this.data.id_tipoTramite!, requerimiento._id!, requerimiento.activo!).subscribe(message => {
-      //   if (requerimiento.activo === false) {
-      //     const indexFound = this.Requerimientos.findIndex(requeri => requerimiento._id === requeri._id)
-      //     this.Requerimientos[indexFound].activo = true
-      //   }
-      //   else {
-      //     this.Requerimientos = this.Requerimientos.filter(requeri => requeri._id !== requerimiento._id)
-      //     this.dataSource.data = this.Requerimientos
-      //   }
+  async cargar_requerimientos() {
+    const { value: file } = await Swal.fire({
+      title: 'Seleccione el archivo',
+      input: 'file',
+      confirmButtonText: 'Aceptar',
+      inputAttributes: {
+        'aria-label': 'Seleccione el archivo a cargar'
+      }
+    })
+    if (file) {
+      this.ReadExcel(file)
+    }
 
-      // })
+
+  }
+  quitar_requerimiento(requerimiento: RequerimientoModel, pos: number) {
+    if (requerimiento._id) {
+      let nuevaSituacion: boolean
+      if (requerimiento.activo) {
+        nuevaSituacion = false
+      }
+      else {
+        nuevaSituacion = true
+      }
+      this.tiposTramitesService.cambiar_situacion_requerimiento(this.data.id_tipoTramite!, requerimiento._id!, nuevaSituacion).subscribe(message => {
+        const indexFound = this.Requerimientos.findIndex(requeri => requerimiento._id === requeri._id)
+        this.Requerimientos[indexFound].activo = nuevaSituacion
+      })
     }
     else {
       this.Requerimientos.splice(pos, 1)
@@ -139,18 +161,17 @@ export class DialogTiposComponent implements OnInit {
   }
 
 
-  ReadExcel(event: any) {
-    let file = event.target.files[0]
+  ReadExcel(File: File) {
+    // let file = event.target.files[0]
     let fileReader = new FileReader()
-    fileReader.readAsBinaryString(file)
+    fileReader.readAsBinaryString(File)
     fileReader.onload = (e) => {
       let listRequeriments = read(fileReader.result, { type: 'binary' })
       let schemasNames = listRequeriments.SheetNames
       let ExcelData = utils.sheet_to_json(listRequeriments.Sheets[schemasNames[0]])
       ExcelData.forEach((data: any) => {
-        this.Requerimientos.push({ nombre: data['__EMPTY_2'], activo: true })
+        this.Requerimientos.unshift({ nombre: data['__EMPTY_2'], activo: true })
       });
-
       this.dataSource.data = this.Requerimientos
       this.dataSource.paginator = this.paginator;
     }

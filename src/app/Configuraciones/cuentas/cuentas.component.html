@@ -1,92 +1,162 @@
 <p>
     <mat-toolbar>
-        <ng-container>
-            <span>Cuentas /
-                <small style="font-size: 14px;">
-                    Total: {{Total}}
-                </small>
+        <ng-container *ngIf="!cuentaService.busqueda">
+            <span>Cuentas
             </span>
             <span class="example-spacer"></span>
-            <button mat-icon-button>
+            <button (click)="modo_filtrado(true)" mat-icon-button>
+                <mat-icon>filter_alt</mat-icon>
+            </button>
+            <button (click)="activar_busqueda()" mat-icon-button>
                 <mat-icon>search</mat-icon>
             </button>
-            <button (click)="agregar_cuenta()" mat-icon-button>
-                <mat-icon>add</mat-icon>
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
             </button>
+            <mat-menu #menu="matMenu">
+                <button (click)="agregar_cuenta()" mat-menu-item>
+                    <mat-icon>group_add</mat-icon>
+                    <span>Crear cuenta y funcionario</span>
+                </button>
+                <button (click)="agregar_funcionario()" mat-menu-item>
+                    <mat-icon>person_add</mat-icon>
+                    <span>Crear funcionario</span>
+                </button>
+            </mat-menu>
         </ng-container>
-        <ng-container *ngIf="false">
+        <ng-container *ngIf="cuentaService.busqueda">
             <mat-form-field floatLabel="never" style="width: 100%;">
-                <mat-label>Ingrese el nombre o sigla de la institucion</mat-label>
-                <input #txtSearch matInput type="text">
-                <button matSuffix mat-icon-button>
+                <mat-label>Ingrese el nombre/dni/cargo del funcionario</mat-label>
+                <input [(ngModel)]="cuentaService.termino_busqueda" (keyup)="buscar()" #txtSearch matInput type="text">
+                <button (click)="desactivar_busqueda()" matSuffix mat-icon-button>
                     <mat-icon>close</mat-icon>
                 </button>
             </mat-form-field>
         </ng-container>
     </mat-toolbar>
+    <mat-toolbar-row *ngIf="modo_filtro">
+        <span>FIltrado por dependencia</span>
+        <mat-form-field appearance="fill">
+            <mat-label>Seleccione la institucion</mat-label>
+            <mat-select [(ngModel)]="parametros_filtro.id_institucion"
+                (selectionChange)="seleccionar_dependencia($event.value)" name="id_institucion">
+                <mat-option *ngFor="let inst of Instituciones" [value]="inst.id_institucion">
+                    {{inst.nombre}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select [formControl]="bankCtrl" placeholder="Bank" #singleSelect>
+                <mat-option>
+                    <ngx-mat-select-search [formControl]="bankFilterCtrl"></ngx-mat-select-search>
+                </mat-option>
+
+                <mat-option *ngFor="let bank of filteredBanks | async" [value]="bank">
+                    {{bank.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button (click)="filtrar()" mat-raised-button color="primary">Filtrar</button>
+        <span class="example-spacer"></span>
+        <button (click)="modo_filtrado(false)" mat-icon-button>
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-toolbar-row>
 </p>
-
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-
-    <ng-container matColumnDef="nro">
-        <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element; let i=index"> {{i+1}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="login">
-        <th mat-header-cell *matHeaderCellDef> Login </th>
-        <td mat-cell *matCellDef="let element"> {{element.login}} </td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="funcionario">
-        <th mat-header-cell *matHeaderCellDef> Funcionario </th>
-        <td mat-cell *matCellDef="let element"> {{element.funcionario.nombre}} </td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="cargo">
-        <th mat-header-cell *matHeaderCellDef> Cargo </th>
-        <td mat-cell *matCellDef="let element"> {{element.funcionario.cargo}} </td>
-    </ng-container>
-    <ng-container matColumnDef="dependencia">
-        <th mat-header-cell *matHeaderCellDef> Dependencia </th>
-        <td mat-cell *matCellDef="let element"> {{element.dependencia.nombre}} </td>
-    </ng-container>
-    <ng-container matColumnDef="rol">
-        <th mat-header-cell *matHeaderCellDef> Rol </th>
-        <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
-    </ng-container>
-    <ng-container matColumnDef="opciones">
-        <th mat-header-cell *matHeaderCellDef> Opciones </th>
-        <td mat-cell *matCellDef="let element">
-            <button (click)="editar_cuenta(element)" mat-icon-button>
-                <mat-icon>edit</mat-icon>
-            </button>
-            <!-- <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                <mat-icon>more_options</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-                <button mat-menu-item>
-                    <mat-icon>dialpad</mat-icon>
-                    <span>Redial</span>
-                </button>
-                <button mat-menu-item disabled>
-                    <mat-icon>voicemail</mat-icon>
-                    <span>Check voice mail</span>
-                </button>
-                <button mat-menu-item>
-                    <mat-icon>notifications_off</mat-icon>
-                    <span>Disable alerts</span>
-                </button>
-            </mat-menu> -->
-
-        </td>
-    </ng-container>
-
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+<div class="container-fluid">
+    <div class="example-container mat-elevation-z8">
+        <div class="example-loading-shade" *ngIf="isLoadingResults">
+            <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        </div>
+        <div class="example-table-container">
+            <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="nro">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element; let i=index"> {{i+1}} </td>
+                </ng-container>
+                <ng-container matColumnDef="login">
+                    <th mat-header-cell *matHeaderCellDef> Login </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div [ngSwitch]="element.cuenta">
+                            <div style="color: red;" *ngSwitchCase="undefined">
+                                <mat-icon style="color:red;">no_accounts</mat-icon>
+                                Sin asignar
+                            </div>
+                            <div *ngSwitchDefault>
+                                <mat-icon style="color: royalblue;">account_circle</mat-icon>
+                                {{element.cuenta.login}}
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef> Funcionario </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="dni">
+                    <th mat-header-cell *matHeaderCellDef> Dni </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dni}} </td>
+                </ng-container>
+                <ng-container matColumnDef="cargo">
+                    <th mat-header-cell *matHeaderCellDef> Cargo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.cargo}} </td>
+                </ng-container>
+                <ng-container matColumnDef="dependencia">
+                    <th mat-header-cell *matHeaderCellDef> Dependencia </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div [ngSwitch]="element.cuenta">
+                            <div style="color: red;" *ngSwitchCase="null || undefined">
+                                Sin asignar
+                            </div>
+                            <div *ngSwitchDefault>
+                                {{element.cuenta.dependencia.nombre}}
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="rol">
+                    <th mat-header-cell *matHeaderCellDef> Rol </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div [ngSwitch]="element.cuenta">
+                            <div style="color: red;" *ngSwitchCase="undefined">
+                                Sin asignar
+                            </div>
+                            <div *ngSwitchDefault>
+                                {{element.cuenta.rol}}
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="opciones">
+                    <th mat-header-cell *matHeaderCellDef> Opciones </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button (click)="editar_funcionario(element)" mat-menu-item>
+                                <mat-icon>edit</mat-icon>
+                                <span>Editar funcionario</span>
+                            </button>
+                            <div *ngIf="element.cuenta">
+                                <button (click)="editar_cuenta(element)" mat-menu-item>
+                                    <mat-icon>manage_accounts</mat-icon>
+                                    <span>Editar cuenta</span>
+                                </button>
+                                <button (click)="asignar_cuenta(element)" mat-menu-item>
+                                    <mat-icon>voice_over_off</mat-icon>
+                                    <span>Reasignar cuenta</span>
+                                </button>
+                            </div>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <mat-paginator (page)="cambiar_paginacion($event)" [length]="cuentaService.dataSize"
+            [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons aria-label="Select page of periodic elements">
+        </mat-paginator>
+    </div>
+</div>

@@ -30,3 +30,16 @@ h1.example-app-name {
     flex: 1 0 auto;
 }
 
+.example-card {
+    max-width: 200px;
+}
+
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.active {
+    color: royalblue;
+}
+ 

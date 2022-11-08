@@ -5,7 +5,6 @@ import { CuentasComponent } from '../Configuraciones/cuentas/cuentas.component';
 import { DependenciasComponent } from '../Configuraciones/dependencias/dependencias.component';
 import { InstitucionesComponent } from '../Configuraciones/instituciones/instituciones.component';
 import { TiposTramitesComponent } from '../Configuraciones/tipos-tramites/tipos-tramites.component';
-import { UsuariosComponent } from '../Configuraciones/usuarios/usuarios.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { AdministracionComponent } from '../Tramites/administracion/administracion.component';
 import { HomeComponent } from './home.component';
@@ -16,7 +15,6 @@ const routes: Routes = [
         children: [
             { path: 'dependencias', component: DependenciasComponent },
             { path: 'instituciones', component: InstitucionesComponent },
-            { path: 'funcionarios', component: UsuariosComponent },
             { path: 'cuentas', component: CuentasComponent },
 
             { path: 'tipos', component: TiposTramitesComponent },

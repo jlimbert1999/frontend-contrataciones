@@ -1,128 +1,30 @@
-.mat-stepper-vertical {
-  margin-top: 8px;
+body {
+  background: #f7f7ff;
+  margin-top: 20px;
 }
 
-.mat-form-field {
-  margin-top: 16px;
-}
 mat-form-field {
   width: 100%;
 }
-.example-spacer {
-  flex: 1 1 auto;
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 0 solid transparent;
+  border-radius: .25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
 }
-mat-toolbar{
-  font-size: 16px;
-}
-/* Structure */
-table {
-  width: 100%;
+
+.me-2 {
+  margin-right: .5rem !important;
 }
 
 .mat-form-field {
-  font-size: 14px;
-  width: 100%;
+  width: 70%;
 }
-/* Structure */
-.example-container {
-  position: relative;
-}
-
-.example-table-container {
-  position: relative;
-  min-height: 200px;
-  max-height: 300px;
-  overflow: auto;
-}
-
-
-.example-loading-shade {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 56px;
-  right: 0;
-  background: rgba(0, 0, 0, 0.15);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.example-rate-limit-reached {
-  max-width: 360px;
-  text-align: center;
-}
-
-/* Column Widths */
-.mat-column-number,
-.mat-column-state {
-  max-width: 64px;
-}
-
-.mat-column-created {
-  max-width: 124px;
-}
-
-
-body{margin-top:20px;
-  background-color:#f2f6fc;
-  color:#69707a;
-  }
-  .img-account-profile {
-      height: 10rem;
-  }
-  .rounded-circle {
-      border-radius: 50% !important;
-  }
-  .card {
-      box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
-  }
-  .card .card-header {
-      font-weight: 500;
-  }
-  .card-header:first-child {
-      border-radius: 0.35rem 0.35rem 0 0;
-  }
-  .card-header {
-      padding: 1rem 1.35rem;
-      margin-bottom: 0;
-      background-color: rgba(33, 40, 50, 0.03);
-      border-bottom: 1px solid rgba(33, 40, 50, 0.125);
-  }
-  .form-control, .dataTable-input {
-      display: block;
-      width: 100%;
-      padding: 0.875rem 1.125rem;
-      font-size: 0.875rem;
-      font-weight: 400;
-      line-height: 1;
-      color: #69707a;
-      background-color: #fff;
-      background-clip: padding-box;
-      border: 1px solid #c5ccd6;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      border-radius: 0.35rem;
-      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-  
-  .nav-borders .nav-link.active {
-      color: #0061f2;
-      border-bottom-color: #0061f2;
-  }
-  .nav-borders .nav-link {
-      color: #69707a;
-      border-bottom-width: 0.125rem;
-      border-bottom-style: solid;
-      border-bottom-color: transparent;
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
-      padding-left: 0;
-      padding-right: 0;
-      margin-left: 1rem;
-      margin-right: 1rem;
-  }
-
-

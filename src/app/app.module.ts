@@ -11,6 +11,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './interceptors/interceptor.service';
 import { AuthModule } from './auth/auth.module';
 import { TramitesModule } from './Tramites/tramites.module';
+import { ToastrModule } from 'ngx-toastr';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +22,7 @@ import { TramitesModule } from './Tramites/tramites.module';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(), // ToastrModule added
     ConfiguracionesModule,
     AuthModule,
     TramitesModule,

@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
-    private authService: AuthService
+    public authService: AuthService
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -29,8 +29,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   
+
   }
+
 
 
 }

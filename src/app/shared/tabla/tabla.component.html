@@ -1,44 +1,56 @@
-<div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource">
-        <ng-container [matColumnDef]="'nro'">
-            <th mat-header-cell *matHeaderCellDef>Nro.</th>
-            <td mat-cell *matCellDef="let element; let i=index">
-                {{i+1}}
-            </td>
-        </ng-container>
-        <ng-container *ngFor="let columna of displayedColumns" [matColumnDef]="columna.key">
-            <th mat-header-cell *matHeaderCellDef>{{columna.titulo}}</th>
-            <td mat-cell *matCellDef="let element" [ngSwitch]="columna.key">
-                <ng-container *ngSwitchCase="'activo'">
-                    <p style="color: darkgreen;" *ngIf="element[columna.key]==1">Habilitado</p>
-                    <p style="color: red;" *ngIf="element[columna.key]==0">Deshabilitado</p>
+<div [@fadeInOnEnter] class="container-fluid">
+    <div class="example-container mat-elevation-z8">
+        <div class="example-loading-shade" *ngIf="isLoadingResults">
+            <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        </div>
+        <div class="example-table-container">
+            <table mat-table [dataSource]="dataSource" class="example-table">
+                <ng-container [matColumnDef]="'nro'">
+                    <th mat-header-cell *matHeaderCellDef>NRO</th>
+                    <td mat-cell *matCellDef="let element; let i=index">
+                        {{i+1}}
+                    </td>
                 </ng-container>
-                <ng-container *ngSwitchCase="'institucion'">
-                    {{element[columna.key].sigla}}
+                <ng-container *ngFor="let columna of displayedColumns" [matColumnDef]="columna.key">
+                    <th mat-header-cell *matHeaderCellDef>{{columna.titulo | uppercase}}</th>
+                    <td mat-cell *matCellDef="let element" [ngSwitch]="columna.key">
+                        <ng-container *ngSwitchCase="'activo'">
+                            <span [ngClass]="element[columna.key]?'c-pill--success':'c-pill--danger'"
+                                class="c-pill">{{element[columna.key]?'HABILITADO':'NO HABILITADO'}}
+                            </span>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'institucion'">
+                            {{element[columna.key].sigla}}
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>{{element[columna.key]}}</ng-container>
+                    </td>
                 </ng-container>
-                <ng-container *ngSwitchDefault>{{element[columna.key]}}</ng-container>
-            </td>
-        </ng-container>
 
-        <ng-container [matColumnDef]="'opciones'">
-            <th mat-header-cell *matHeaderCellDef>Opciones</th>
-            <td mat-cell *matCellDef="let element">
-                <button (click)="editarDatos(element)" mat-icon-button>
-                    <mat-icon>edit</mat-icon>
-                </button>
-                <button *ngIf="element.activo" (click)="eliminarDatos(element)" mat-icon-button>
-                    <mat-icon>delete</mat-icon>
-                </button>
-                <button *ngIf="!element.activo" (click)="habilitarDatos(element)" mat-icon-button>
-                    <mat-icon>restart_alt</mat-icon>
-                </button>
-            </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="columsTable"></tr>
-        <tr mat-row *matRowDef="let row; columns: columsTable;"></tr>
-    </table>
-    <mat-paginator [pageSizeOptions]="[10, 20, 40]" [length]="paginationService.dataSize" (page)="getPageDetails($event)"
-        showFirstLastButtons aria-label="Select page of periodic elements">
-    </mat-paginator>
+                <ng-container [matColumnDef]="'opciones'">
+                    <th mat-header-cell *matHeaderCellDef>OPCIONES</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button (click)="editarDatos(element)" mat-icon-button>
+                            <mat-icon style="color: royalblue;">edit</mat-icon>
+                        </button>
+                        <button (click)="cambiarSutacion(element)" mat-icon-button>
+                            <mat-icon style="color: rgb(241, 74, 55);">{{element.activo?'delete':'restart_alt'}}
+                            </mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columsTable"></tr>
+                <tr mat-row *matRowDef="let row; columns: columsTable;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="displayedColumns.length+2">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </table>
 
+
+        </div>
+        <mat-paginator [pageSizeOptions]="[10, 20, 40]" [length]="paginationService.dataSize"
+            (page)="getPageDetails($event)" showFirstLastButtons aria-label="Select page of periodic elements">
+        </mat-paginator>
+    </div>
 </div>

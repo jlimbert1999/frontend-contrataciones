@@ -12,18 +12,23 @@ import { DependenciasService } from '../../services/dependencias.service';
 })
 export class DependenciaDialogComponent implements OnInit {
   titulo: string = '';
-  Instituciones: { id_institucion: string; nombre: string }[];
+  Instituciones: { id_institucion: string; nombre: string, sigla: string }[];
+
+  //guardar data institucion seleccionada
+  institucion: { id_institucion: string; nombre: string, sigla: string };
+
   Form_Dependencia: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
     sigla: ['', [Validators.required, Validators.maxLength(10)]],
     institucion: ['', Validators.required],
   });
+
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DependenciaModel,
     public dialogRef: MatDialogRef<DependenciaDialogComponent>,
     private dependenciasService: DependenciasService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.data) {
@@ -45,12 +50,15 @@ export class DependenciaDialogComponent implements OnInit {
       if (this.data) {
         this.dependenciasService.actualizar_dependencia(
           this.data.id_dependencia!, this.Form_Dependencia.value
-        ).subscribe(dep=>this.dialogRef.close(dep));
+        ).subscribe(dep => this.dialogRef.close(dep));
       } else {
-        console.log(this.Form_Dependencia.value);
         this.dependenciasService
           .agregar_dependencia(this.Form_Dependencia.value)
-          .subscribe((dep) => {
+          .subscribe(dep => {
+            dep.institucion = {
+              sigla: this.institucion.sigla,
+              _id: this.institucion.id_institucion
+            }
             this.dialogRef.close(dep);
           });
       }

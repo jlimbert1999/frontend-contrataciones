@@ -42,6 +42,6 @@
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancelar</button>
-    <button mat-button [disabled]="Form_Funcionario.invalid" (click)="guardar()">Guardar</button>
+    <button class="close-button" mat-button mat-dialog-close>Cancelar</button>
+    <button class="save-button" mat-button [disabled]="Form_Funcionario.invalid" (click)="guardar()">Guardar</button>
 </mat-dialog-actions>

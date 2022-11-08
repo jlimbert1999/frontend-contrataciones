@@ -1,0 +1,15 @@
+/* Structure */
+table {
+    width: 100%;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.mat-column-opciones {
+    width: 32px;
+    padding-left: 24px;
+    text-align: center;
+}

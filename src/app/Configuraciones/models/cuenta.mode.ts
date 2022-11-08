@@ -1,18 +1,15 @@
 import { UsuarioModel } from "./usuario.model"
-import { DependenciaModel } from "./dependencia.model"
+
 export interface CuentaModel {
-    id_cuenta?: string
-    funcionario: string
-    dependencia:DataTransfer
+    _id?: string
+    dependencia: string
     login: string
-    password:string
-    rol:string
+    password: string
+    rol: string
 }
-export interface Cuenta {
-    id_cuenta?: string
-    funcionario: UsuarioModel
-    dependencia:DependenciaModel
-    login: string
-    password:string
-    rol:string
+
+export interface CuentaModel_view extends UsuarioModel {
+    cuenta?: { _id: string, login: string, rol: string, dependencia: { nombre: string, institucion: { sigla: string } } }
+
 }
+

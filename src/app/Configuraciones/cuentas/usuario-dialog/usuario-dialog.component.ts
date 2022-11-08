@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CuentaModel_view } from '../../models/cuenta.mode';
 import { InstitucionModel } from '../../models/institucion.model';
 import { UsuarioModel } from '../../models/usuario.model';
 import { UsuariosService } from '../../services/usuarios.service';
@@ -11,21 +12,21 @@ import { UsuariosService } from '../../services/usuarios.service';
   styleUrls: ['./usuario-dialog.component.css']
 })
 export class UsuarioDialogComponent implements OnInit {
-  titulo:string
+  titulo: string
   Form_Funcionario: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
     dni: ['', Validators.required],
-    telefono: ['',  [Validators.required, Validators.maxLength(8)]],
+    telefono: ['', [Validators.required, Validators.maxLength(8)]],
     cargo: ['', Validators.required],
     direccion: ['', Validators.required]
   });
 
   constructor(
-    private fb:FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: UsuarioModel,
+    private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: CuentaModel_view,
     public dialogRef: MatDialogRef<UsuarioDialogComponent>,
     private usuariosService: UsuariosService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     if (this.data) {
@@ -38,11 +39,11 @@ export class UsuarioDialogComponent implements OnInit {
 
   }
 
-  guardar(){
+  guardar() {
     if (this.Form_Funcionario.valid) {
       if (this.data) {
-        this.usuariosService.editar_funcionario(this.data.id_funcionario!,this.Form_Funcionario.value).subscribe(inst => {
-          this.dialogRef.close(inst)
+        this.usuariosService.editar_funcionario(this.data.id_funcionario!, this.Form_Funcionario.value).subscribe(user => {
+          this.dialogRef.close(user)
         })
       }
       else {

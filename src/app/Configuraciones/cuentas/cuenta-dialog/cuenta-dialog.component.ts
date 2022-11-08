@@ -2,29 +2,34 @@ import {
   AfterViewInit,
   Component,
   Inject,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Cuenta, CuentaModel } from '../../models/cuenta.mode';
+import { map, Observable, ReplaySubject, startWith, Subject, take, takeUntil } from 'rxjs';
+import { CuentaModel, CuentaModel_view } from '../../models/cuenta.mode';
 import { UsuarioModel } from '../../models/usuario.model';
 import { CuentaService } from '../../services/cuenta.service';
+import Swal from 'sweetalert2';
+import { crear_hoja_usuarios } from 'src/app/generacion_pdfs/usuario';
+import { MatSelect } from '@angular/material/select';
+import { InstitucionModel } from '../../models/institucion.model';
+import { DependenciaModel } from '../../models/dependencia.model';
 
 @Component({
   selector: 'app-cuenta-dialog',
   templateUrl: './cuenta-dialog.component.html',
   styleUrls: ['./cuenta-dialog.component.css'],
 })
-export class CuentaDialogComponent implements OnInit {
+export class CuentaDialogComponent implements OnInit, AfterViewInit, OnDestroy {
   titulo: string = '';
-  propietario: { nombre: string; cargo: string };
-  dependencias: { id_dependencia: string; nombre: string }[];
-
-  asignar: boolean = false;
+  dependencias: { id_dependencia: string, nombre: string }[] = [];
+  Instituciones: { id_institucion: string, nombre: string }[] = [];
   cambiar_password: boolean = false;
   Form_Funcionario: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
@@ -47,48 +52,68 @@ export class CuentaDialogComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  Roles=[
-    {value:'planificacion', viewValue:'Planificacion'},
-    {value:'sec_planificacion', viewValue:'Secretaria de planificacion'},
-    {value:'sicoes', viewValue:'SICOES'},
-    {value:'ampe', viewValue:'AMPE'},
+
+  public bankCtrl: FormControl = new FormControl();
+  public bankFilterCtrl: FormControl = new FormControl();
+  public filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+  protected _onDestroy = new Subject<void>();
+
+  Roles = [
+    { value: 'planificacion', viewValue: 'Planificacion' },
+    { value: 'sec_planificacion', viewValue: 'Secretaria de planificacion' },
+    { value: 'sicoes', viewValue: 'SICOES' },
+    { value: 'ampe', viewValue: 'AMPE' },
   ]
+
 
   constructor(
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: CuentaModel_view,
     public dialogRef: MatDialogRef<CuentaDialogComponent>,
     private cuentasService: CuentaService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.data) {
       this.titulo = 'Edicion';
-      this.propietario = this.data.funcionario;
       this.Form_Cuenta = this.fb.group({
-        login: [this.data.login, Validators.required],
-        rol: [this.data.rol, Validators.required],
+        login: [this.data.cuenta!.login, Validators.required],
+        rol: [this.data.cuenta!.rol, Validators.required]
       });
     } else {
       this.titulo = 'Registro';
-      this.cuentasService
-        .obtener_dependencias_hablitadas()
-        .subscribe((dep) => (this.dependencias = dep));
+      this.cuentasService.obtener_instituciones_hablitadas().subscribe(inst => {
+        this.Instituciones = inst
+      })
+
     }
   }
+  ngOnDestroy() {
+    this._onDestroy.next();
+    this._onDestroy.complete();
+  }
+
+
   guardar() {
     if (this.data) {
       this.cuentasService
-        .editar_cuenta(this.data.id_cuenta!, this.Form_Cuenta.value)
-        .subscribe((cuenta) => {
+        .editar_cuenta(this.data.cuenta!._id, this.Form_Cuenta.value)
+        .subscribe(cuenta => {
+          crear_hoja_usuarios(this.data.nombre, this.data.cargo, this.data.cuenta!.dependencia.nombre, this.data.dni, this.data.cuenta!.dependencia.institucion.sigla, this.Form_Cuenta.get('login')?.value, this.Form_Cuenta.get('password')?.value)
           this.dialogRef.close(cuenta);
         });
     } else {
-      this.cuentasService
-        .agregar_cuenta(this.Form_Cuenta.value, this.Form_Funcionario.value)
-        .subscribe((cuenta) => {
-          this.dialogRef.close(cuenta);
-        });
+      let datosCuenta: CuentaModel = {
+        login: this.Form_Cuenta.get('login')?.value,
+        password: this.Form_Cuenta.get('password')?.value,
+        rol: this.Form_Cuenta.get('rol')?.value,
+        dependencia: this.Form_Cuenta.get('dependencia')?.value
+      }
+      this.cuentasService.agregar_cuenta(datosCuenta, this.Form_Funcionario.value).subscribe(cuenta => {
+        this.dialogRef.close(cuenta);
+        crear_hoja_usuarios(cuenta.nombre, cuenta.cargo, cuenta.cuenta!.dependencia.nombre, cuenta.dni, cuenta.cuenta!.dependencia.institucion.sigla, cuenta.cuenta!.login, this.Form_Cuenta.get('password')?.value)
+      });
     }
   }
 
@@ -96,14 +121,14 @@ export class CuentaDialogComponent implements OnInit {
     this.cambiar_password = value;
     if (value) {
       this.Form_Cuenta = this.fb.group({
-        login: [this.data.login, Validators.required],
-        password: ['', Validators.required],
-        rol: [this.data.rol, Validators.required],
+        login: [this.data.cuenta?.login, Validators.required],
+        password: [this.data.dni, Validators.required],
+        rol: [this.data.cuenta?.rol, Validators.required],
       });
     } else {
       this.Form_Cuenta = this.fb.group({
-        login: [this.data.login, Validators.required],
-        rol: [this.data.rol, Validators.required],
+        login: [this.data.cuenta?.login, Validators.required],
+        rol: [this.data.cuenta?.rol, Validators.required]
       });
     }
   }
@@ -114,29 +139,59 @@ export class CuentaDialogComponent implements OnInit {
       this.dataSource.sort = this.sort;
     });
   }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-  asignar_cuenta(funcionario: {id_funcionario:string, nombre:string, cargo:string, dni:string}) {
-
-    this.cuentasService
-      .asignar_cuenta(this.data.id_cuenta!,this.data.funcionario._id, funcionario.id_funcionario)
-      .subscribe(cuenta => {
-        this.propietario.nombre = funcionario.nombre;
-        this.propietario.cargo = funcionario.cargo;
-        const nombreLogin:string[]=funcionario.nombre.split(" ")
-        this.Form_Cuenta = this.fb.group({
-          login: [`${nombreLogin[0]}${nombreLogin[1][0]}`.toUpperCase(), Validators.required],
-          password: [funcionario.dni, Validators.required],
-          rol: [cuenta.rol, Validators.required],
+  seleccionar_institucion(id_institucion: string) {
+    this.cuentasService.obtener_dependencias_hablitadas(id_institucion).subscribe(dep => {
+      this.dependencias = dep
+      this.bankCtrl.setValue(this.dependencias);
+      this.filteredBanks.next(this.dependencias.slice());
+      this.bankFilterCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+          this.filterBanks();
         });
-        this.cambiar_password=true
-        this.asignar=false  
+    });
+  }
+  generar_credenciales() {
+    let newLogin: string[] = `${this.Form_Funcionario.get('nombre')?.value}`.split(' ')
+    if (newLogin.length >= 2) {
+      this.Form_Cuenta.get('login')?.setValue(`${newLogin[0]}${newLogin[1][0]}`)
+      this.Form_Cuenta.get('password')?.setValue(this.Form_Funcionario.get('dni')?.value)
+    }
+
+
+  }
+  ngAfterViewInit() {
+    // this.setInitialValue();
+  }
+  protected filterBanks() {
+    if (!this.dependencias) {
+      return;
+    }
+    // get the search keyword
+    let search = this.bankFilterCtrl.value;
+    if (!search) {
+      this.filteredBanks.next(this.dependencias.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredBanks.next(
+      this.dependencias.filter(bank => bank.nombre.toLowerCase().indexOf(search) > -1)
+    );
+  }
+  protected setInitialValue() {
+    this.filteredBanks
+      .pipe(take(1), takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.singleSelect.compareWith = (a: any, b: any) => a && b && a.id_dependencia === b.id_dependencia;
       });
   }
+
+
+
+
+
+
 }

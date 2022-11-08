@@ -1,5 +1,6 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import Swal from 'sweetalert2'
 
@@ -8,7 +9,7 @@ import Swal from 'sweetalert2'
 })
 export class InterceptorService {
 
-  constructor() { }
+  constructor(private router: Router) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const headers = new HttpHeaders({
       'token': localStorage.getItem('token') || ''
@@ -21,8 +22,8 @@ export class InterceptorService {
     )
   }
   manejoErrores(error: HttpErrorResponse) {
-    console.log(error);
     if (error.status === 401) {
+      this.router.navigate(['/login'])
       console.log('No autorizado, vuelva a iniciar sesion');
     }
     else {
