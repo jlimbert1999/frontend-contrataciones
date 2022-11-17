@@ -64,6 +64,7 @@ export class CuentaDialogComponent implements OnInit, AfterViewInit, OnDestroy {
     { value: 'sec_planificacion', viewValue: 'Secretaria de planificacion' },
     { value: 'sicoes', viewValue: 'SICOES' },
     { value: 'ampe', viewValue: 'AMPE' },
+    { value: 'jefe', viewValue: 'Jefe de departamento' },
   ]
 
 
@@ -78,8 +79,8 @@ export class CuentaDialogComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.data) {
       this.titulo = 'Edicion';
       this.Form_Cuenta = this.fb.group({
-        login: [this.data.cuenta!.login, Validators.required],
-        rol: [this.data.cuenta!.rol, Validators.required]
+        login: [this.data.login, Validators.required],
+        rol: [this.data.rol, Validators.required]
       });
     } else {
       this.titulo = 'Registro';
@@ -98,9 +99,9 @@ export class CuentaDialogComponent implements OnInit, AfterViewInit, OnDestroy {
   guardar() {
     if (this.data) {
       this.cuentasService
-        .editar_cuenta(this.data.cuenta!._id, this.Form_Cuenta.value)
+        .editar_cuenta(this.data.id_cuenta, this.Form_Cuenta.value)
         .subscribe(cuenta => {
-          crear_hoja_usuarios(this.data.nombre, this.data.cargo, this.data.cuenta!.dependencia.nombre, this.data.dni, this.data.cuenta!.dependencia.institucion.sigla, this.Form_Cuenta.get('login')?.value, this.Form_Cuenta.get('password')?.value)
+          crear_hoja_usuarios(this.data.funcionario.nombre, this.data.funcionario.cargo, this.data.dependencia.nombre, this.data.funcionario.dni, this.data.dependencia.institucion.sigla, this.Form_Cuenta.get('login')?.value, this.Form_Cuenta.get('password')?.value)
           this.dialogRef.close(cuenta);
         });
     } else {
@@ -112,7 +113,7 @@ export class CuentaDialogComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.cuentasService.agregar_cuenta(datosCuenta, this.Form_Funcionario.value).subscribe(cuenta => {
         this.dialogRef.close(cuenta);
-        crear_hoja_usuarios(cuenta.nombre, cuenta.cargo, cuenta.cuenta!.dependencia.nombre, cuenta.dni, cuenta.cuenta!.dependencia.institucion.sigla, cuenta.cuenta!.login, this.Form_Cuenta.get('password')?.value)
+        crear_hoja_usuarios(cuenta.funcionario.nombre, cuenta.funcionario.cargo, cuenta.dependencia.nombre, cuenta.funcionario.dni, cuenta.dependencia.institucion.sigla, cuenta.login, this.Form_Cuenta.get('password')?.value)
       });
     }
   }
@@ -121,14 +122,14 @@ export class CuentaDialogComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cambiar_password = value;
     if (value) {
       this.Form_Cuenta = this.fb.group({
-        login: [this.data.cuenta?.login, Validators.required],
-        password: [this.data.dni, Validators.required],
-        rol: [this.data.cuenta?.rol, Validators.required],
+        login: [this.data.login, Validators.required],
+        password: [this.data.funcionario.dni, Validators.required],
+        rol: [this.data.rol, Validators.required],
       });
     } else {
       this.Form_Cuenta = this.fb.group({
-        login: [this.data.cuenta?.login, Validators.required],
-        rol: [this.data.cuenta?.rol, Validators.required]
+        login: [this.data.login, Validators.required],
+        rol: [this.data.rol, Validators.required]
       });
     }
   }

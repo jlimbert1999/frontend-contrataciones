@@ -1,11 +1,14 @@
 <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
   <mat-toolbar color="primary" class="example-toolbar">
     <button mat-icon-button (click)="snav.toggle()">
-      <mat-icon>{{snav.opened?'arrow_back_ios':'menu'}}</mat-icon>
+      <mat-icon>menu</mat-icon>
     </button>
-    <h1 class="example-app-name">{{authService.Detalles_Cuenta.funcionario|titlecase}}</h1>
+    <span class="campo_cuenta">
+      <div mat-line> {{authService.Detalles_Cuenta.funcionario|titlecase|titlecase}}</div>
+      <div mat-line style="font-size: 11px">{{authService.Detalles_Cuenta.cargo|titlecase}} ({{authService.Detalles_Cuenta.rol|titlecase}})</div>
+  </span>
+   
     <span class="example-spacer"></span>
-
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
       <mat-icon>account_circle</mat-icon>
     </button>

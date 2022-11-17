@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CuentaModel_view } from '../../models/cuenta.mode';
-import { InstitucionModel } from '../../models/institucion.model';
 import { UsuarioModel } from '../../models/usuario.model';
 import { UsuariosService } from '../../services/usuarios.service';
 
@@ -23,7 +21,7 @@ export class UsuarioDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: CuentaModel_view,
+    @Inject(MAT_DIALOG_DATA) public data: UsuarioModel,
     public dialogRef: MatDialogRef<UsuarioDialogComponent>,
     private usuariosService: UsuariosService
   ) { }
@@ -36,13 +34,12 @@ export class UsuarioDialogComponent implements OnInit {
     else {
       this.titulo = 'Registro'
     }
-
   }
 
   guardar() {
     if (this.Form_Funcionario.valid) {
       if (this.data) {
-        this.usuariosService.editar_funcionario(this.data.id_funcionario!, this.Form_Funcionario.value).subscribe(user => {
+        this.usuariosService.editar_funcionario(this.data._id!, this.Form_Funcionario.value).subscribe(user => {
           this.dialogRef.close(user)
         })
       }

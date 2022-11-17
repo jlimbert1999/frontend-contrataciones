@@ -80,7 +80,7 @@ export class TiposTramitesComponent implements OnInit {
         this.TiposTramites = data
         this.toastr.success(undefined, 'Tipo de tramite actualizado', {
           positionClass: 'toast-bottom-right',
-          timeOut: 3000,
+          timeOut: 3000
         })
       });
   }

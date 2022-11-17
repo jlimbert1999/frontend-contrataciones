@@ -26,6 +26,7 @@ export class InterceptorService {
       this.router.navigate(['/login'])
       console.log('No autorizado, vuelva a iniciar sesion');
     }
+ 
     else {
       Swal.fire('error', error.error.message, 'error')
     }

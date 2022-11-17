@@ -13,6 +13,7 @@ const base_url = environment.base_url
   providedIn: 'root'
 })
 export class UsuariosService {
+  
   termino_busqueda: string = ""
   busqueda: boolean = false
   constructor(private http: HttpClient, private paginationService: PaginationService, private cuentaService: CuentaService) { }

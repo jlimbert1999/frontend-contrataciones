@@ -24,7 +24,7 @@ export class CuentasComponent implements OnInit {
   Cuentas: CuentaModel_view[] = []
   Total: number = 0
   dataSource = new MatTableDataSource<CuentaModel_view>()
-  displayedColumns = ['nro', 'login', 'nombre', 'dni', 'cargo', 'dependencia', 'rol', 'opciones']
+  displayedColumns = ['login', 'nombre', 'dni', 'cargo', 'dependencia', 'institucion', 'rol', 'opciones']
   isLoadingResults = true;
 
   //opciones para filtrar
@@ -72,14 +72,7 @@ export class CuentasComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: CuentaModel) => {
       if (result) {
-        this.Cuentas.map(element => {
-          if (element.cuenta?._id === result._id) {
-            element.cuenta!.login = result.login
-            element.cuenta!.rol = result.rol
-          }
-          return element
-        })
-        this.dataSource.data = this.Cuentas
+        this.obtener_cuentas()
       }
     });
   }
@@ -88,24 +81,16 @@ export class CuentasComponent implements OnInit {
     const dialogRef = this.dialog.open(UsuarioDialogComponent, {
       width: '600px'
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.Cuentas.unshift(result)
-        if (this.Cuentas.length > this.cuentaService.rows) {
-          this.Cuentas.pop()
-        }
-        this.dataSource.data = this.Cuentas
-      }
-    });
+
   }
   editar_funcionario(user: CuentaModel_view) {
     const dialogRef = this.dialog.open(UsuarioDialogComponent, {
-      data: user
+      data: user.funcionario
     });
-    dialogRef.afterClosed().subscribe((result: CuentaModel_view) => {
+    dialogRef.afterClosed().subscribe((result: UsuarioModel) => {
       if (result) {
-        const indexFound = this.Cuentas.findIndex(element => element.id_funcionario === result.id_funcionario)
-        this.Cuentas[indexFound] = result
+        const indexFound = this.Cuentas.findIndex(element => element.funcionario._id === result._id)
+        this.Cuentas[indexFound].funcionario = result
         this.dataSource.data = this.Cuentas
       }
     });
@@ -117,9 +102,7 @@ export class CuentasComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: CuentaModel_view) => {
       if (result) {
-        const indexFound = this.Cuentas.findIndex(element => element.id_funcionario === cuenta.id_funcionario)
-        this.Cuentas[indexFound] = result
-        this.dataSource.data = this.Cuentas
+        this.obtener_cuentas()
       }
     });
   }

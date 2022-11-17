@@ -1,0 +1,162 @@
+<p>
+    <mat-toolbar>
+        <span>Bandeja salida</span>
+    </mat-toolbar>
+</p>
+<div class="container-fluid">
+    <section class="example-container mat-elevation-z8" tabindex="0">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="situacion" sticky>
+                <th mat-header-cell *matHeaderCellDef> Situacion </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.aceptado==true && element.reenviado==false">
+                        <span class="c-pill c-pill--success">Recibido</span>
+                    </ng-container>
+                    <!-- <ng-container *ngIf="element.aceptado==false && element.reenviado==true">
+                        <span class="c-pill c-pill--info">Reeviado</span>
+                    </ng-container> -->
+                    <ng-container *ngIf="element.rechazado==true">
+                        <span class="c-pill c-pill--danger">Rechazado</span>
+                    </ng-container>
+                    <ng-container
+                        *ngIf="element.rechazado==false && element.reenviado==false && element.aceptado==false">
+                        <span class="c-pill c-pill--warnig">Pendiente</span>
+                    </ng-container>
+
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="fecha_envio">
+                <th mat-header-cell *matHeaderCellDef> Fecha envio </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.fecha_envio|date:'short'}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="fecha_recibido">
+                <th mat-header-cell *matHeaderCellDef> Fecha aceptacion </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.fecha_recibido|date:'short'}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="alterno" sticky>
+                <th mat-header-cell *matHeaderCellDef> Alterno </th>
+                <td mat-cell *matCellDef="let element">
+                    <a [routerLink]="['ficha',element.id_tramite ]">{{element.alterno}}</a>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="ubicacion">
+                <th mat-header-cell *matHeaderCellDef> Ubicacion </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-icon>location_on</mat-icon>
+                    {{element.ubicacion==null?'--':element.ubicacion}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="objeto">
+                <th mat-header-cell *matHeaderCellDef> Objecto de contratacion </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.objeto}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="precio">
+                <th mat-header-cell *matHeaderCellDef> Precio referencial </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.precio}} Bs.
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="origen">
+                <th mat-header-cell *matHeaderCellDef> Origen</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.origen}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="plazo">
+                <th mat-header-cell *matHeaderCellDef> Plazo de ejecucion </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.plazo_ejecucion}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="nro_apertura">
+                <th mat-header-cell *matHeaderCellDef> Nro. apertura</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.apertura}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="modalidad">
+                <th mat-header-cell *matHeaderCellDef> Modalidad </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.modalidad}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cuce">
+                <th mat-header-cell *matHeaderCellDef> CUCE </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.cuce}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="precio_adjudicado">
+                <th mat-header-cell *matHeaderCellDef> Precio adjudicado</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.precio_adjudicado}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="fecha_creacion">
+                <th mat-header-cell *matHeaderCellDef> Fecha creacion</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.fecha_creacion|date:'short'}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="tipo_contratacion">
+                <th mat-header-cell *matHeaderCellDef> Tipo contratacion</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.tipo_contratacion}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="empresa_adjudicada">
+                <th mat-header-cell *matHeaderCellDef> Empresa adjudicada</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.empresa_adjudicada}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="representante_legal">
+                <th mat-header-cell *matHeaderCellDef>Representante legal</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.representante_legal}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.estado}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="observaciones">
+                <th mat-header-cell *matHeaderCellDef>Observaciones</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.observaciones}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="opciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button [disabled]="element.aceptado==true  || element.reenviado==true"
+                            (click)="reenviar_tramite(element)" mat-menu-item>
+                            <mat-icon>send</mat-icon>
+                            <span>Reenviar tramite</span>
+                        </button>
+
+                    </mat-menu>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">Sin registros</td>
+            </tr>
+        </table>
+    </section>
+</div>

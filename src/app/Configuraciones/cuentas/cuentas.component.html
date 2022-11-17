@@ -70,63 +70,44 @@
         </div>
         <div class="example-table-container">
             <table mat-table [dataSource]="dataSource">
-                <ng-container matColumnDef="nro">
-                    <th mat-header-cell *matHeaderCellDef> No. </th>
-                    <td mat-cell *matCellDef="let element; let i=index"> {{i+1}} </td>
-                </ng-container>
                 <ng-container matColumnDef="login">
                     <th mat-header-cell *matHeaderCellDef> Login </th>
                     <td mat-cell *matCellDef="let element">
-                        <div [ngSwitch]="element.cuenta">
-                            <div style="color: red;" *ngSwitchCase="undefined">
-                                <mat-icon style="color:red;">no_accounts</mat-icon>
-                                Sin asignar
-                            </div>
-                            <div *ngSwitchDefault>
-                                <mat-icon style="color: royalblue;">account_circle</mat-icon>
-                                {{element.cuenta.login}}
-                            </div>
-                        </div>
+                        <mat-icon style="color: royalblue;">account_circle</mat-icon>
+                        {{element.login}}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="nombre">
                     <th mat-header-cell *matHeaderCellDef> Funcionario </th>
-                    <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.funcionario.nombre |titlecase}} </td>
                 </ng-container>
                 <ng-container matColumnDef="dni">
                     <th mat-header-cell *matHeaderCellDef> Dni </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dni}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.funcionario.dni}} </td>
                 </ng-container>
                 <ng-container matColumnDef="cargo">
                     <th mat-header-cell *matHeaderCellDef> Cargo </th>
-                    <td mat-cell *matCellDef="let element"> {{element.cargo}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.funcionario.cargo}} </td>
                 </ng-container>
                 <ng-container matColumnDef="dependencia">
                     <th mat-header-cell *matHeaderCellDef> Dependencia </th>
                     <td mat-cell *matCellDef="let element">
-                        <div [ngSwitch]="element.cuenta">
-                            <div style="color: red;" *ngSwitchCase="null || undefined">
-                                Sin asignar
-                            </div>
-                            <div *ngSwitchDefault>
-                                {{element.cuenta.dependencia.nombre}}
-                            </div>
-                        </div>
+                        {{element.dependencia.nombre}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="institucion">
+                    <th mat-header-cell *matHeaderCellDef> Institucion </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.dependencia.institucion.sigla|uppercase}}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="rol">
                     <th mat-header-cell *matHeaderCellDef> Rol </th>
                     <td mat-cell *matCellDef="let element">
-                        <div [ngSwitch]="element.cuenta">
-                            <div style="color: red;" *ngSwitchCase="undefined">
-                                Sin asignar
-                            </div>
-                            <div *ngSwitchDefault>
-                                {{element.cuenta.rol}}
-                            </div>
-                        </div>
+                        {{element.rol|titlecase}}
                     </td>
                 </ng-container>
+
                 <ng-container matColumnDef="opciones">
                     <th mat-header-cell *matHeaderCellDef> Opciones </th>
                     <td mat-cell *matCellDef="let element">
@@ -138,7 +119,7 @@
                                 <mat-icon>edit</mat-icon>
                                 <span>Editar funcionario</span>
                             </button>
-                            <div *ngIf="element.cuenta">
+                            <div>
                                 <button (click)="editar_cuenta(element)" mat-menu-item>
                                     <mat-icon>manage_accounts</mat-icon>
                                     <span>Editar cuenta</span>

@@ -1,0 +1,93 @@
+table {
+    width: 100%;
+}
+
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.example-container {
+    overflow: auto;
+}
+
+td.mat-column-cuce,
+td.mat-column-fecha_envio,
+td.mat-column-modalidad,
+td.mat-column-nro_apertura,
+td.mat-column-precio_adjudicado,
+td.mat-column-apertura,
+td.mat-column-origen,
+td.mat-column-plazo,
+td.mat-column-precio,
+td.mat-column-fecha_creacion,
+td.mat-column-tipo_contratacion,
+td.mat-column-empresa_adjudicada,
+td.mat-column-representante_legal,
+td.mat-column-observaciones,
+td.mat-column-estado,
+td.mat-column-alterno {
+    min-width: 200px;
+}
+
+td.mat-column-ubicacion {
+    min-width: 400px;
+}
+
+td.mat-column-objeto {
+    min-width: 400px;
+}
+
+td.mat-column-recibido {
+    min-width: 150px;
+}
+
+.mat-icon {
+    vertical-align: middle;
+}
+
+
+
+tr.example-detail-row {
+    height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.example-element-row td {
+    border-bottom-width: 0;
+}
+
+.example-element-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+.example-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+}
+
+.example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+}
+
+.example-element-description {
+    padding: 16px;
+}
+
+.example-element-description-attribution {
+    opacity: 0.5;
+}

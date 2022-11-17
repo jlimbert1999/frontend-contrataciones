@@ -37,7 +37,7 @@ export class AsignacionDialogComponent implements OnInit {
     }
   }
 
-  asignar_cuenta(funcionario: { id_funcionario: string, nombre: string, cargo: string, dni: string }) {
+  asignar_cuenta(funcionario: { _id: string, nombre: string, cargo: string, dni: string }) {
     Swal.fire({
       title: `Asignar la cuenta a un nuevo funcionario?`,
       text: `${funcionario.nombre} (${funcionario.cargo}) obtendra la cuenta`,
@@ -55,10 +55,10 @@ export class AsignacionDialogComponent implements OnInit {
           password: funcionario.dni
         }
         this.cuentasService
-          .asignar_cuenta(this.data.cuenta!._id, this.data.id_funcionario!, funcionario.id_funcionario, newAccount)
+          .asignar_cuenta(this.data.id_cuenta, this.data.funcionario._id!, funcionario._id, newAccount)
           .subscribe(cuenta => {
             this.dialogRef.close(cuenta)
-            crear_hoja_usuarios(cuenta.nombre, cuenta.cargo, cuenta.cuenta!.dependencia.nombre, cuenta.dni, cuenta.cuenta!.dependencia.institucion.sigla, newAccount.login, newAccount.password)
+            crear_hoja_usuarios(cuenta.funcionario.nombre, cuenta.funcionario.cargo, cuenta.dependencia.nombre, cuenta.funcionario.dni, cuenta.dependencia.institucion.sigla, newAccount.login, newAccount.password)
           });
       }
     })

@@ -8,8 +8,12 @@ export interface CuentaModel {
     rol: string
 }
 
-export interface CuentaModel_view extends UsuarioModel {
-    cuenta?: { _id: string, login: string, rol: string, dependencia: { nombre: string, institucion: { sigla: string } } }
-
+export interface CuentaModel_view {
+    id_cuenta: string
+    login: string
+    rol: string
+    funcionario: UsuarioModel,
+    dependencia: {
+        nombre: string, institucion: { sigla: string }
+    }
 }
-

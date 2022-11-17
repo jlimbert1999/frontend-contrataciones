@@ -6,15 +6,16 @@ import { catchError, map } from 'rxjs/operators'
 import Swal from 'sweetalert2'
 import jwt_decode from "jwt-decode";
 import { Router } from '@angular/router';
+import { SocketService } from 'src/app/Tramites/services/socket.service';
 const base_url = environment.base_url
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  Detalles_Cuenta: { funcionario: string, cargo: string, permiso: string, id_cuenta: number, sigla: string }
+  Detalles_Cuenta: { funcionario: string, cargo: string, rol: string, id_cuenta: number, institucion: string, dependencia: string }
   Menu: any[] = []
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private socketService: SocketService) { }
 
 
   get token() {
@@ -37,6 +38,7 @@ export class AuthService {
     ))
   }
   logout() {
+    this.socketService.disconnect()
     localStorage.removeItem('token')
     this.router.navigate(['/login'])
   }
@@ -44,6 +46,7 @@ export class AuthService {
     return this.http.get(`${base_url}/login/verify`).pipe(
       map((resp: any) => {
         this.Detalles_Cuenta = jwt_decode(this.token)
+        console.log(this.Detalles_Cuenta)
         this.Menu = resp.Menu
         return true
       }), catchError(err => {
@@ -51,5 +54,4 @@ export class AuthService {
       })
     )
   }
-
 }

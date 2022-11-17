@@ -1,9 +1,9 @@
 export interface UsuarioModel {
-    id_funcionario?: string
+    _id?: string
     nombre: string
-    dni:string
-    telefono:number
-    direccion:string
+    dni: string
+    telefono: number
+    direccion: string
     cargo: string
-    estado?:boolean
+    estado?: boolean
 }

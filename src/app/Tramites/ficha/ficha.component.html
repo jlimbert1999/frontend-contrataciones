@@ -1,0 +1,145 @@
+<mat-tab-group mat-align-tabs="center">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">info</mat-icon>
+            Informacion
+        </ng-template>
+        <div *ngIf="Tramite">
+            <div class="card">
+                <h1 class="card-header">Contratacion ({{Tramite.alterno}})</h1>
+                <div class="card-body">
+                    <h2 class="card-title">Objeto de contratacion</h2>
+                    <p class="card-text">{{Tramite.objeto}}</p>
+                    <div class="row">
+                        <div class="col">
+                            Presupuesto referencial:{{Tramite.precio}} Bs.
+                        </div>
+                        <div class="col">
+                            Plazo de ejecucion: {{Tramite.plazo_ejecucion}}
+                        </div>
+                        <div class="col">
+                            Fecha creacion: {{Tramite.fecha_creacion|date:'short'}}
+                        </div>
+                        <div class="col">
+                            Apertura programatica: {{Tramite.apertura}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            Estado: {{Tramite.estado}}
+                        </div>
+                        <div class="col">
+                            Origen: {{Tramite.origen}}
+                        </div>
+                        <div class="col">
+                            Ubicacion: {{Tramite.ubicacion|uppercase}}
+                        </div>
+                        <div class="col">
+                            cuce: {{Tramite.cuce}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            Modalidad: {{Tramite.modalidad}}
+                        </div>
+                        <div class="col">
+                            Precio adjudicado: {{Tramite.precio_adjudicado}}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <strong class="text-muted">
+                        Registrado en: {{Tramite.cuenta.dependencia.nombre}} -
+                        {{Tramite.cuenta.funcionario.nombre|titlecase}} ({{Tramite.cuenta.funcionario.cargo}})
+                    </strong>
+                </div>
+            </div>
+
+        </div>
+
+    </mat-tab>
+ 
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">account_tree</mat-icon>
+            Flujo de trabajo grafico
+        </ng-template>
+        <div>
+            <ngx-graph class="chart-container" [links]="links" [nodes]="nodos" [clusters]="clusters"
+            [curve]="curve" layout="dagreCluster" [showMiniMap]="true" [draggingEnabled]="false">
+                <ng-template #defsTemplate>
+                    <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4"
+                        orient="auto">
+                        <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+                    </svg:marker>
+                </ng-template>
+
+                <ng-template #clusterTemplate let-cluster>
+                    <svg:g class="node cluster">
+                        <text x="100" y="25" fill="black" style="font-size: 20px;" text-anchor="middle"
+                            alignment-baseline="central">{{cluster.label}}</text>
+                        <svg:rect rx="5" ry="5" [attr.width]="cluster.dimension.width"
+                            [attr.height]="cluster.dimension.height" [attr.fill]="cluster.data.color"
+                            style="stroke-width:3;stroke:rgb(0,0,0);" />
+                    </svg:g>
+                </ng-template>
+
+                <ng-template #nodeTemplate let-node>
+
+                    <svg:g class="node"  ngx-tooltip [matTooltip]="'Tiempo empreado: Pendiente '" >
+                        <svg:foreignObject width="400" height="150">
+                            <xhtml:div class="cardContainer">
+                                <mat-card class="example-card">
+                                    <mat-card-header>
+                                        <div mat-card-avatar class="example-header-image"></div>
+                                        <mat-card-title *ngIf="node.data.Nombre"
+                                            style="font-size: 16px; color: #013A63;">
+                                            {{node.data.Nombre|titlecase}}
+                                        </mat-card-title>
+                                        <mat-card-title *ngIf="!node.data.Nombre" style="font-size: 16px; color: red;">
+                                            Sin
+                                            asignar
+                                        </mat-card-title>
+
+                                        <mat-card-subtitle>{{node.data.NombreCar|titlecase}}
+                                        </mat-card-subtitle>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        <p><small><strong>Dependencia:
+                                                </strong>
+                                                {{node.data.NombreDep}}</small></p>
+                                        <!-- <p> <small class="text-muted"> <strong>Institucion:
+                                                </strong>{{node.data.Sigla}}</small></p> -->
+                                    </mat-card-content>
+                                </mat-card>
+                            </xhtml:div>
+                        </svg:foreignObject>
+                    </svg:g>
+                </ng-template>
+
+                <ng-template #linkTemplate let-link>
+                    <svg:g class="edge">
+                        <svg:path class="line" stroke-width="2"
+                            [attr.stroke]="link.completado=== 'rechazado' ? '#dc143c' : '#000000'" marker-end="url(#arrow)">
+                        </svg:path>
+                        <svg:text *ngIf="link.completado=== 'rechazado'" class="edge-label" text-anchor="middle">
+                            <textPath class="text-path" [attr.href]="'#' + link.id"
+                                [style.dominant-baseline]="link.dominantBaseline" startOffset="50%">
+                                {{link.label}}
+                            </textPath>
+                        </svg:text>
+                        <svg:g class="deAssignEdge" *ngIf="link.midPoint && link.completado=== ''"
+                            [attr.transform]="'translate(' + (link.midPoint.x) + ',' + (link.midPoint.y) + ')'">
+                            <circle  r="15" stroke-width="1" fill="black"/>
+                            <text fill="white" x="-5" y="5">{{link.label}}</text>
+                        </svg:g>
+                    </svg:g>
+
+                </ng-template>
+            </ngx-graph>
+        </div>
+    </mat-tab>
+</mat-tab-group>

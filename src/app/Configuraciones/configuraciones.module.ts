@@ -15,6 +15,7 @@ import { TiposTramitesComponent } from './tipos-tramites/tipos-tramites.componen
 import { DialogTiposComponent } from './tipos-tramites/dialog-tipos/dialog-tipos.component';
 import { AsignacionDialogComponent } from './cuentas/asignacion-dialog/asignacion-dialog.component';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { FuncionariosComponent } from './funcionarios/funcionarios.component';
 
 
 
@@ -29,7 +30,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     CuentaDialogComponent,
     TiposTramitesComponent,
     DialogTiposComponent,
-    AsignacionDialogComponent
+    AsignacionDialogComponent,
+    FuncionariosComponent
   ],
   imports: [
     CommonModule,

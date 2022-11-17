@@ -1,32 +1,144 @@
-<h2 mat-dialog-title>Tramite</h2>
+<h2 mat-dialog-title>Registro</h2>
 <mat-dialog-content>
-    <div class="row">
-        <div class="col">
-            <mat-form-field class="example-full-width" appearance="legacy">
-                <mat-label>Objeto de contratacion</mat-label>
-                <input matInput>
+    <form *ngIf="authService.Detalles_Cuenta.rol==='planificacion'" [formGroup]="Form_Tramite">
+        <div *ngIf="!this.data" class="row">
+            <mat-form-field appearance="fill">
+                <mat-label>Seleccione el tipo de tramite</mat-label>
+                <mat-select formControlName="tipoTramite">
+                    <mat-option (click)="cargar_requerimientos(tipo.requerimientos, tipo.segmento)"
+                        *ngFor="let tipo of tipos_tramites" [value]="tipo.id_tipoTramite">
+                        {{tipo.nombre}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
+            <mat-selection-list *ngIf="requerimientos.length>0">
+                <mat-list-option *ngFor="let requerimiento of requerimientos">
+                    {{requerimiento.nombre }}
+                </mat-list-option>
+            </mat-selection-list>
         </div>
-        <div class="col">
-            <mat-form-field class="example-full-width" appearance="legacy">
-                <mat-label>Apertura programatica</mat-label>
-                <input matInput>
-            </mat-form-field>
+        <div class="row">
+            <div class="col-8">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Objeto de la contratacion</mat-label>
+                    <textarea formControlName="objeto" matInput placeholder="...."></textarea>
+                </mat-form-field>
+            </div>
+            <div class="col-4">
+                <mat-form-field appearance="fill" floatLabel="always">
+                    <mat-label>Precio referencial</mat-label>
+                    <input formControlName="precio" matInput type="number" class="example-right-align" placeholder="0">
+                    <span matPrefix>Bs&nbsp;</span>
+                    <span matSuffix>.00</span>
+                </mat-form-field>
+            </div>
+
         </div>
-       
-    </div>
-    <div class="row">
-        <div class="col">
-            <mat-form-field class="example-full-width" appearance="legacy">
-                <mat-label>Precio referencia</mat-label>
-                <input matInput>
-            </mat-form-field>
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Apertura programatica</mat-label>
+                    <input formControlName="apertura" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Origen distrito</mat-label>
+                    <input formControlName="origen" matInput>
+                </mat-form-field>
+            </div>
         </div>
 
-    </div>
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Codigo proyecto</mat-label>
+                    <input formControlName="codigo_proyecto" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Plazo de ejecucion</mat-label>
+                    <input formControlName="plazo_ejecucion" matInput>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    <form *ngIf="authService.Detalles_Cuenta.rol==='sicoes'" [formGroup]="Form_Tramite_sicoes">
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Modalidad</mat-label>
+                    <input formControlName="modalidad" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Cuce</mat-label>
+                    <input formControlName="cuce" matInput>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <mat-form-field appearance="fill" floatLabel="always">
+                    <mat-label>Precio adjudicado</mat-label>
+                    <input formControlName="precio_adjudicado" matInput type="number" class="example-right-align"
+                        placeholder="0">
+                    <span matPrefix>Bs&nbsp;</span>
+                    <span matSuffix>.00</span>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Tipo contratacion</mat-label>
+                    <input formControlName="tipo_contratacion" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Fecha apertura sobre</mat-label>
+                    <input formControlName="fecha_apertura_sobre" matInput>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Tipo contratacion</mat-label>
+                    <input formControlName="tipo_resolucion" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Empresa adjudicada</mat-label>
+                    <input formControlName="empresa_adjudicada" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Representante</mat-label>
+                    <input formControlName="representante_legal" matInput>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="example-full-width" appearance="legacy">
+                    <mat-label>Observaciones</mat-label>
+                    <input formControlName="observaciones" matInput>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+
+    </form>
+
+
 </mat-dialog-content>
-
 <mat-dialog-actions align="end">
-    <button mat-dialog-close mat-raised-button>Cancelar</button>
-    <button mat-raised-button>Aceptar</button>
+    <button class="close-button" mat-dialog-close mat-raised-button>Cancelar</button>
+    <button class="save-button" mat-raised-button (click)="guardar()">Aceptar</button>
 </mat-dialog-actions>
