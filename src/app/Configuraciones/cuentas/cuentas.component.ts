@@ -24,7 +24,7 @@ export class CuentasComponent implements OnInit {
   Cuentas: CuentaModel_view[] = []
   Total: number = 0
   dataSource = new MatTableDataSource<CuentaModel_view>()
-  displayedColumns = ['login', 'nombre', 'dni', 'cargo', 'dependencia', 'institucion', 'rol', 'opciones']
+  displayedColumns = ['login', 'nombre',  'cargo', 'dependencia', 'institucion', 'rol', 'opciones']
   isLoadingResults = true;
 
   //opciones para filtrar

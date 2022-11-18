@@ -13,10 +13,9 @@ const base_url = environment.base_url
   providedIn: 'root'
 })
 export class AuthService {
-  Detalles_Cuenta: { funcionario: string, cargo: string, rol: string, id_cuenta: number, institucion: string, dependencia: string }
+  Detalles_Cuenta: { id_cuenta: number, funcionario: string, cargo: string, rol: string, institucion: string, dependencia: string }
   Menu: any[] = []
   constructor(private http: HttpClient, private router: Router, private socketService: SocketService) { }
-
 
   get token() {
     return localStorage.getItem('token') || ''
@@ -31,6 +30,7 @@ export class AuthService {
     }
     return this.http.post(`${base_url}/login`, formData).pipe(tap(
       (res: any) => {
+        console.log(jwt_decode(res.token))
         localStorage.setItem('token', res.token)
       }, (error) => {
         Swal.fire('Error ingreso', error.error.message, 'error')
@@ -45,8 +45,7 @@ export class AuthService {
   validar_token(): Observable<boolean> {
     return this.http.get(`${base_url}/login/verify`).pipe(
       map((resp: any) => {
-        this.Detalles_Cuenta = jwt_decode(this.token)
-        console.log(this.Detalles_Cuenta)
+        this.Detalles_Cuenta = jwt_decode(resp.token)
         this.Menu = resp.Menu
         return true
       }), catchError(err => {
